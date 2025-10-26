@@ -1,0 +1,1578 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cycl — Updated and better than ever</title>
+    <link rel="shortcut icon" href="image/32.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #f0fff4;
+            --text: #05240f;
+            --muted: rgba(5, 36, 15, 0.75);
+            --accent: #31b54f;
+            --accent-strong: #0e7c2d;
+            --surface: rgba(255, 255, 255, 0.88);
+            --surface-strong: rgba(255, 255, 255, 0.95);
+            --shadow-soft: 0 20px 48px rgba(9, 64, 26, 0.18);
+            --shadow-hard: 0 28px 60px rgba(9, 64, 26, 0.24);
+            --radius-lg: 28px;
+            --radius-md: 18px;
+            --radius-sm: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            padding: clamp(1.5rem, 4vw, 3rem) clamp(1.5rem, 6vw, 6rem) clamp(4rem, 10vw, 8rem);
+            background: linear-gradient(135deg, #0e7c2d 0%, #31b54f 55%, #7ef38f 100%);
+            color: #031e0b;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: clamp(2rem, 6vw, 4rem);
+        }
+
+        .hero::before,
+        .hero::after {
+            content: "";
+            position: absolute;
+            border-radius: 999px;
+            pointer-events: none;
+            opacity: 0.35;
+            filter: blur(0.4px);
+        }
+
+        .hero::before {
+            width: clamp(260px, 45vw, 400px);
+            height: clamp(260px, 45vw, 400px);
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.65), transparent 65%);
+            top: -18%;
+            left: -8%;
+        }
+
+        .hero::after {
+            width: clamp(300px, 50vw, 460px);
+            height: clamp(300px, 50vw, 460px);
+            background: radial-gradient(circle at 70% 70%, rgba(255, 255, 255, 0.4), transparent 70%);
+            bottom: -22%;
+            right: -12%;
+        }
+
+        .top-nav {
+            position: sticky;
+            top: clamp(1rem, 2vw, 1.5rem);
+            z-index: 10;
+            align-self: center;
+            width: min(1080px, 100%);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.6rem 1rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.16);
+            box-shadow: 0 12px 24px rgba(9, 64, 26, 0.22);
+            backdrop-filter: blur(22px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            gap: 1rem;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1rem;
+            color: #031e0b;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+        }
+
+        .brand img {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+        }
+
+        .nav-toggle {
+            display: none;
+            background: rgba(3, 30, 11, 0.08);
+            border: 1px solid rgba(3, 30, 11, 0.15);
+            border-radius: 999px;
+            padding: 0.35rem 0.85rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #031e0b;
+        }
+
+        .nav-list {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-list a {
+            padding: 0.5rem 1rem;
+            border-radius: 999px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: rgba(3, 30, 11, 0.78);
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .nav-list a:hover,
+        .nav-list a:focus-visible {
+            background: rgba(255, 255, 255, 0.4);
+            color: #031e0b;
+        }
+
+        .nav-list a.active {
+            background: #031e0b;
+            color: #ffffff;
+        }
+
+        .hero__inner {
+            width: min(1080px, 100%);
+            margin: 0 auto;
+            display: grid;
+            gap: clamp(2rem, 8vw, 4rem);
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            align-items: center;
+        }
+
+        .hero__copy {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.8rem, 3vw, 1.8rem);
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero__eyebrow {
+            margin: 0;
+            font-weight: 800;
+            font-size: clamp(3rem, 7vw, 5.2rem);
+            letter-spacing: -0.04em;
+            line-height: 1;
+        }
+
+        .hero__brand {
+            margin: 0;
+            font-size: clamp(1.75rem, 4vw, 2.6rem);
+            font-weight: 600;
+            letter-spacing: -0.01em;
+        }
+
+        .hero__meta {
+            margin: 0;
+            font-size: clamp(1rem, 2.6vw, 1.35rem);
+            font-weight: 500;
+            color: rgba(3, 30, 11, 0.75);
+        }
+
+        .hero__headline {
+            margin: 0;
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .hero__lead {
+            margin: 0;
+            font-size: clamp(1.05rem, 2.2vw, 1.3rem);
+            color: rgba(3, 30, 11, 0.8);
+            max-width: 520px;
+        }
+
+        .download-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .store-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.85rem 1.4rem;
+            border-radius: 999px;
+            background: #031e0b;
+            color: #ffffff;
+            box-shadow: 0 22px 48px rgba(3, 30, 11, 0.35);
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .store-button img {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+        }
+
+        .store-button--light {
+            background: rgba(255, 255, 255, 0.88);
+            color: #031e0b;
+        }
+
+        .store-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 26px 54px rgba(3, 30, 11, 0.4);
+        }
+
+        .hero__art {
+            position: relative;
+            justify-self: end;
+            filter: drop-shadow(0 30px 55px rgba(8, 37, 17, 0.32));
+        }
+
+        .hero__art img {
+            width: clamp(220px, 38vw, 340px);
+            border-radius: 30%;
+            transform: rotate(-12deg);
+        }
+
+        .main {
+            width: min(1080px, 92vw);
+            margin: clamp(-4rem, -8vw, -6rem) auto 4rem;
+            display: flex;
+            flex-direction: column;
+            gap: clamp(2.5rem, 6vw, 4rem);
+        }
+
+        .section {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: clamp(2rem, 6vw, 3.5rem);
+            box-shadow: var(--shadow-soft);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section--glass {
+            background: rgba(255, 255, 255, 0.74);
+            backdrop-filter: blur(18px);
+        }
+
+        .section--contrast {
+            background: linear-gradient(135deg, rgba(5, 30, 11, 0.95), rgba(14, 124, 45, 0.9));
+            color: #f1fff6;
+        }
+
+        .section__grid {
+            display: grid;
+            gap: clamp(1.8rem, 4vw, 3.2rem);
+        }
+
+        .section__grid--two {
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            align-items: center;
+        }
+
+        .stack {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .section__visual {
+            justify-self: center;
+        }
+
+        .section__visual img {
+            border-radius: var(--radius-md);
+            box-shadow: 0 18px 40px rgba(9, 64, 26, 0.22);
+        }
+
+        .counter-card {
+            background: var(--surface-strong);
+            border-radius: var(--radius-md);
+            padding: 1.8rem;
+            box-shadow: 0 16px 32px rgba(9, 64, 26, 0.18);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            text-align: left;
+        }
+
+        .counter-card__value {
+            font-size: clamp(2.5rem, 7vw, 3.6rem);
+            margin: 0;
+            font-weight: 800;
+            color: var(--accent-strong);
+        }
+
+        .counter-card__label {
+            margin: 0;
+            font-size: 1.1rem;
+            color: var(--muted);
+        }
+
+        .highlight {
+            color: var(--accent);
+        }
+
+        .ghost-button {
+            align-self: flex-start;
+            padding: 0.85rem 1.8rem;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            color: #f1fff6;
+            font-weight: 600;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+
+        .ghost-button:hover {
+            background: rgba(255, 255, 255, 0.18);
+            transform: translateY(-2px);
+        }
+
+        .section__narrow {
+            max-width: 760px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.75rem;
+            text-align: center;
+        }
+
+        .section__narrow p {
+            margin: 0;
+        }
+
+        .feature-grid {
+            display: grid;
+            gap: 1.2rem;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        }
+
+        .feature-card {
+            padding: 1.6rem;
+            border-radius: var(--radius-md);
+            background: rgba(255, 255, 255, 0.92);
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            align-items: flex-start;
+            box-shadow: 0 16px 28px rgba(9, 64, 26, 0.18);
+            text-align: left;
+        }
+
+        .feature-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 16px;
+            background: rgba(49, 181, 79, 0.16);
+            display: grid;
+            place-items: center;
+            font-size: 1.4rem;
+        }
+
+        .mission-card {
+            background: rgba(255, 255, 255, 0.92);
+            border-radius: var(--radius-md);
+            padding: clamp(1.8rem, 4vw, 2.8rem);
+            box-shadow: 0 20px 44px rgba(9, 64, 26, 0.18);
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .stat-grid {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        }
+
+        .stat-card {
+            padding: 1.4rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(5, 36, 15, 0.08);
+            background: linear-gradient(135deg, #e8f8eb, #ffffff);
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            align-items: center;
+        }
+
+        .stat-card strong {
+            font-size: 2rem;
+            color: var(--accent-strong);
+        }
+
+        .benefits-grid {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        }
+
+        .benefits-grid ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            text-align: left;
+        }
+
+        .benefits-grid li {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: var(--muted);
+        }
+
+        .benefits-grid li span {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .innovation-banner {
+            background: linear-gradient(135deg, var(--accent-strong), #2ec162);
+            color: white;
+            padding: clamp(1.6rem, 4vw, 2.2rem);
+            border-radius: var(--radius-md);
+            text-align: left;
+            box-shadow: var(--shadow-hard);
+        }
+
+        .cta-button {
+            padding: 1rem 2.6rem;
+            border-radius: 999px;
+            background: var(--accent-strong);
+            color: white;
+            font-weight: 600;
+            width: fit-content;
+            align-self: center;
+            box-shadow: var(--shadow-soft);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hard);
+        }
+
+        .analytics-card {
+            background: rgba(255, 255, 255, 0.94);
+            border-radius: var(--radius-md);
+            padding: 2rem;
+            box-shadow: 0 22px 44px rgba(9, 64, 26, 0.2);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 1.6rem;
+        }
+
+        .analytics-grid {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(2, minmax(100px, 1fr));
+        }
+
+        .analytics-card__item {
+            background: rgba(5, 36, 15, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 1.4rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .checklist {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+        }
+
+        .checklist li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.65rem;
+            color: var(--muted);
+        }
+
+        .checklist strong {
+            color: var(--text);
+        }
+
+        .logo-strip {
+            display: grid;
+            grid-auto-flow: column;
+            grid-auto-columns: minmax(140px, 1fr);
+            gap: 1.5rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+        }
+
+        .logo-strip img {
+            height: 160px;
+            width: auto;
+            border-radius: var(--radius-sm);
+            object-fit: cover;
+            box-shadow: 0 16px 32px rgba(9, 64, 26, 0.18);
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-top: 65%;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: 0 20px 44px rgba(9, 64, 26, 0.24);
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        .tilted-image {
+            width: clamp(220px, 60%, 280px);
+            margin-left: auto;
+            border-radius: var(--radius-sm);
+            transform: rotate(3deg);
+            box-shadow: 0 18px 36px rgba(9, 64, 26, 0.2);
+        }
+
+        /* Modern Mission Section Styles */
+        .section--accent {
+            background: linear-gradient(135deg, rgba(49, 181, 79, 0.08), rgba(14, 124, 45, 0.05));
+            border: 1px solid rgba(49, 181, 79, 0.12);
+        }
+
+        .section__wide {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: clamp(2.5rem, 6vw, 4rem);
+        }
+
+        .mission-hero {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .section-title {
+            margin: 0;
+            font-size: clamp(2rem, 5vw, 2.8rem);
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: -0.02em;
+        }
+
+        .section-lead {
+            margin: 0;
+            font-size: clamp(1.05rem, 2.2vw, 1.2rem);
+            color: var(--muted);
+            line-height: 1.7;
+            max-width: 820px;
+            margin: 0 auto;
+        }
+
+        .features-showcase {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        }
+
+        .feature-card-modern {
+            padding: 2rem;
+            border-radius: var(--radius-md);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.88));
+            border: 1px solid rgba(49, 181, 79, 0.15);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: flex-start;
+            box-shadow: 0 8px 24px rgba(9, 64, 26, 0.12);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: left;
+        }
+
+        .feature-card-modern:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 40px rgba(9, 64, 26, 0.18);
+        }
+
+        .feature-icon-modern {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+            display: grid;
+            place-items: center;
+            font-size: 1.5rem;
+            box-shadow: 0 8px 20px rgba(49, 181, 79, 0.3);
+        }
+
+        .feature-card-modern h3 {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .feature-card-modern p {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .results-panel {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.92));
+            border-radius: var(--radius-lg);
+            padding: clamp(2rem, 5vw, 3rem);
+            box-shadow: 0 16px 48px rgba(9, 64, 26, 0.15);
+            border: 1px solid rgba(49, 181, 79, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+        }
+
+        .results-header {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .results-header h3 {
+            margin: 0;
+            font-size: clamp(1.5rem, 3.5vw, 2rem);
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .results-header p {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        .stats-showcase {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        }
+
+        .stat-card-modern {
+            padding: 1.75rem;
+            border-radius: var(--radius-md);
+            background: linear-gradient(135deg, rgba(49, 181, 79, 0.08), rgba(126, 243, 143, 0.06));
+            border: 1px solid rgba(49, 181, 79, 0.15);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            align-items: center;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card-modern:hover {
+            transform: scale(1.05);
+        }
+
+        .stat-value {
+            font-size: clamp(2.25rem, 5vw, 3rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-strong), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.95rem;
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        .benefits-modern {
+            display: grid;
+            gap: 1.25rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        }
+
+        .benefit-col {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            border-radius: var(--radius-sm);
+            background: rgba(49, 181, 79, 0.04);
+        }
+
+        .check-icon {
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+            color: white;
+            display: grid;
+            place-items: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        .benefit-item span:last-child {
+            color: var(--text);
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+
+        .innovation-card {
+            background: linear-gradient(135deg, var(--accent-strong), #2ec162);
+            border-radius: var(--radius-lg);
+            padding: clamp(2rem, 5vw, 3rem);
+            box-shadow: 0 20px 48px rgba(14, 124, 45, 0.35);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .innovation-card::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            right: -30%;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.15), transparent 60%);
+            pointer-events: none;
+        }
+
+        .innovation-icon {
+            font-size: 3rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .innovation-card h3 {
+            margin: 0;
+            font-size: clamp(1.5rem, 3.5vw, 2rem);
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+
+        .innovation-card p {
+            margin: 0;
+            font-size: clamp(1rem, 2vw, 1.15rem);
+            line-height: 1.7;
+            opacity: 0.95;
+            max-width: 720px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-button-large {
+            padding: 1.25rem 3rem;
+            border-radius: 999px;
+            background: linear-gradient(135deg, var(--accent-strong), var(--accent));
+            color: white;
+            font-weight: 600;
+            font-size: 1.05rem;
+            width: fit-content;
+            align-self: center;
+            box-shadow: 0 12px 32px rgba(14, 124, 45, 0.35);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .cta-button-large:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 16px 40px rgba(14, 124, 45, 0.45);
+        }
+
+        /* ESG Section Styles */
+        .section--esg {
+            background: linear-gradient(135deg, rgba(240, 255, 244, 0.6), rgba(255, 255, 255, 0.95));
+        }
+
+        .esg-visual {
+            justify-self: center;
+        }
+
+        .analytics-card-modern {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.92));
+            border-radius: var(--radius-lg);
+            padding: 2.5rem;
+            box-shadow: 0 20px 48px rgba(9, 64, 26, 0.18);
+            border: 1px solid rgba(49, 181, 79, 0.12);
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .analytics-card-modern h3 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .metrics-grid {
+            display: grid;
+            gap: 1.25rem;
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .metric-card {
+            padding: 1.75rem;
+            border-radius: var(--radius-md);
+            background: linear-gradient(135deg, rgba(49, 181, 79, 0.08), rgba(126, 243, 143, 0.05));
+            border: 1px solid rgba(49, 181, 79, 0.15);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-strong), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .metric-label {
+            font-size: 0.95rem;
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        .highlight-bright {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .checklist-modern {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .checklist-modern li {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1.25rem;
+            border-radius: var(--radius-md);
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(49, 181, 79, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .checklist-modern li:hover {
+            transform: translateX(4px);
+            box-shadow: 0 8px 24px rgba(9, 64, 26, 0.12);
+        }
+
+        .bullet-icon {
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+            color: white;
+            display: grid;
+            place-items: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .checklist-modern li div {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .checklist-modern strong {
+            color: var(--text);
+            font-size: 1.05rem;
+        }
+
+        .checklist-modern p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Partners Section Styles */
+        .section--partners {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(240, 255, 244, 0.6));
+        }
+
+        .partners-title {
+            margin: 0 0 2.5rem;
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .partners-grid {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        }
+
+        .partner-card {
+            aspect-ratio: 1;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: 0 12px 32px rgba(9, 64, 26, 0.15);
+            border: 1px solid rgba(49, 181, 79, 0.12);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: white;
+        }
+
+        .partner-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 48px rgba(9, 64, 26, 0.22);
+        }
+
+        .partner-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Video Section Styles */
+        .section--video {
+            background: linear-gradient(135deg, rgba(240, 255, 244, 0.4), rgba(255, 255, 255, 0.98));
+        }
+
+        .video-container {
+            position: relative;
+            padding-top: 56.25%;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: 0 24px 56px rgba(9, 64, 26, 0.25);
+            border: 2px solid rgba(49, 181, 79, 0.2);
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        .app-preview {
+            width: clamp(240px, 65%, 300px);
+            margin-left: auto;
+            border-radius: var(--radius-md);
+            transform: rotate(3deg);
+            box-shadow: 0 20px 48px rgba(9, 64, 26, 0.25);
+            border: 3px solid rgba(49, 181, 79, 0.15);
+        }
+
+        @media (max-width: 720px) {
+            .features-showcase {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-showcase {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .benefits-modern {
+                grid-template-columns: 1fr;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .partners-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .app-preview {
+                margin: 0 auto;
+            }
+        }
+
+        .site-footer {
+            background: linear-gradient(135deg, #1d1d1d, #050505);
+            padding: 2.5rem 1.5rem 2rem;
+            color: rgba(255, 255, 255, 0.75);
+        }
+
+        .footer-inner {
+            width: min(1080px, 90vw);
+            margin: 0 auto;
+            display: grid;
+            gap: 1.5rem;
+            align-items: center;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .footer-brand img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+        }
+
+        .footer-links,
+        .footer-social {
+            display: flex;
+            gap: 0.85rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .footer-links a,
+        .footer-social a {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.85rem;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .footer-social a {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.08);
+            display: grid;
+            place-items: center;
+        }
+
+        .footer-links a:hover,
+        .footer-social a:hover {
+            color: #7ef38f;
+            transform: translateY(-2px);
+        }
+
+        .footer-social a:hover {
+            background: rgba(126, 243, 143, 0.15);
+        }
+
+        .footer-note {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        @media (max-width: 820px) {
+            .top-nav {
+                flex-wrap: wrap;
+                padding: 0.75rem 1rem;
+            }
+
+            .nav-toggle {
+                display: inline-flex;
+            }
+
+            .nav-list {
+                width: 100%;
+                display: none;
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .nav-list a {
+                text-align: center;
+            }
+
+            .nav-list[data-open="true"] {
+                display: flex;
+            }
+
+            .hero__art img {
+                transform: rotate(-6deg);
+            }
+
+            .logo-strip {
+                grid-auto-columns: minmax(120px, 65%);
+            }
+        }
+
+        @media (max-width: 540px) {
+            .hero {
+                padding: 1.5rem 1.5rem 4.5rem;
+            }
+
+            .top-nav {
+                position: relative;
+            }
+
+            .hero__inner {
+                grid-template-columns: 1fr;
+            }
+
+            .download-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .store-button {
+                justify-content: center;
+            }
+
+            .section__grid--two {
+                grid-template-columns: 1fr;
+            }
+
+            .tilted-image {
+                margin: 0 auto;
+            }
+
+            .footer-inner {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="hero" id="home">
+        <nav class="top-nav" aria-label="Primary">
+            <a class="brand" href="#home">
+                <img src="image/logo.png" alt="Cycl logo">
+                Cycl
+            </a>
+            <button class="nav-toggle" type="button" aria-expanded="false"
+                aria-controls="primary-navigation">Menu</button>
+            <ul class="nav-list" id="primary-navigation">
+                <li><a class="links active" href="#home">Home</a></li>
+                <li><a class="links" href="#business">Business</a></li>
+                <li><a class="links" href="#Private">Private</a></li>
+                <li><a class="links" href="aboutus.html">About</a></li>
+            </ul>
+        </nav>
+
+        <div class="hero__inner">
+            <div class="hero__copy">
+                <p class="hero__eyebrow">Revolutionizing Recycling</p>
+                <p class="hero__lead">Join the sustainable future with Cycl's innovative recycling solutions. Earn
+                    rewards,
+                    reduce waste, and help us build a cleaner planet.</p>
+                <div class="download-buttons">
+                    <a class="store-button" href="https://play.google.com/store/apps/details?id=com.mobile.cycl"
+                        target="_blank" rel="noopener">
+                        <img src="image/gplay.png" alt="Google Play logo">
+                        Download Android
+                    </a>
+                    <a class="store-button store-button--light" href="https://apps.apple.com/us/app/cycl/id1661695563"
+                        target="_blank" rel="noopener">
+                        <img src="image/apple.png" alt="Apple App Store logo">
+                        Download iOS
+                    </a>
+                </div>
+            </div>
+            <figure class="hero__art" aria-hidden="true">
+                <img src="image/logo.png" alt="Cycl app icon">
+            </figure>
+        </div>
+    </header>
+
+    <main class="main">
+        <section id="impact" class="section section--glass">
+            <div class="section__grid section__grid--two">
+                <div class="stack">
+                    <div class="counter-card">
+                        <h3 id="recycledCount" class="counter-card__value">Loading...</h3>
+                        <p class="counter-card__label">Bottles & Cans Recycled</p>
+                    </div>
+                    <p>Cycl is revolutionizing the way we recycle, combining technology and environmental stewardship
+                        for a
+                        sustainable future. With each bottle and can recycled via Cycl, we're not only reducing waste
+                        but also
+                        conserving resources and diminishing our carbon footprint. Join us in this green movement and be
+                        a part of
+                        a change that benefits our planet.</p>
+                </div>
+                <figure class="section__visual">
+                    <img src="image/recyclegrl.png" alt="Cycl deposit station">
+                </figure>
+            </div>
+        </section>
+
+        <section id="business" class="section section--contrast">
+            <div class="section__grid section__grid--two">
+                <div class="stack">
+                    <h2>Get your Cycl deposit station and elevate your business by promoting <span
+                            class="highlight">sustainability
+                            and attracting environmentally conscious customers</span></h2>
+                    <p>Cycl is a mobile app connecting users to portable deposit stations where they can recycle cans
+                        and bottles
+                        in exchange for discounts from participating partners. By providing a Cycl deposit station on
+                        your
+                        premises, you reduce the waste generated by your operations and promote a circular economy.
+                        Additionally, it
+                        provides a convenient option for employees and customers to recycle on-site and attracts
+                        environmentally
+                        conscious customers. These customers can use the Cycl app to locate your business and discover
+                        your other
+                        products and services, potentially becoming regular customers.</p>
+                    <a class="ghost-button" href="kontaktnettside.html">Get Cycl station</a>
+                </div>
+                <figure class="section__visual">
+                    <img src="image/mallcycl.png" alt="Cycl station installed in a business">
+                </figure>
+            </div>
+        </section>
+
+        <section id="mission" class="section section--accent">
+            <div class="section__wide">
+                <div class="mission-hero">
+                    <h2 class="section-title">Revolutionizing Bottle and Can Recycling</h2>
+                    <p class="section-lead"><strong>Cycl is a groundbreaking deposit solution</strong> that makes
+                        returning
+                        bottles and cans far more
+                        flexible than traditional vending machines. Our mission is to ensure that 100% of bottles and
+                        cans are
+                        returned for responsible recycling – today, approximately 140 million units end up outside the
+                        system.</p>
+                </div>
+
+                <div class="features-showcase">
+                    <article class="feature-card-modern">
+                        <div class="feature-icon-modern">📱</div>
+                        <h3>Smart &amp; Simple</h3>
+                        <p>We make ordinary collection containers smart through a mobile app and AI technology.</p>
+                    </article>
+                    <article class="feature-card-modern">
+                        <div class="feature-icon-modern">⚡</div>
+                        <h3>Cost-Effective</h3>
+                        <p>Stations without electronics, affordable to install, and flexible enough to place almost
+                            anywhere.</p>
+                    </article>
+                    <article class="feature-card-modern">
+                        <div class="feature-icon-modern">📊</div>
+                        <h3>Data-Driven</h3>
+                        <p>Collect valuable data that can be converted into ESG reports and concrete climate indicators.
+                        </p>
+                    </article>
+                </div>
+
+                <div class="results-panel">
+                    <div class="results-header">
+                        <h3>Market-Proven Results</h3>
+                        <p>Cycl is developed as a comprehensive solution to the existing deposit system. Our deployments
+                            across high
+                            schools, libraries, and urban centers have demonstrated exceptional user adoption and
+                            environmental
+                            impact,
+                            paving the way for expansion to shopping centers and service stations.</p>
+                    </div>
+
+                    <div class="benefits-modern">
+                        <div class="benefit-col">
+                            <div class="benefit-item">
+                                <span class="check-icon">✓</span>
+                                <span>Concrete green profile and documentation through ESG reports</span>
+                            </div>
+                            <div class="benefit-item">
+                                <span class="check-icon">✓</span>
+                                <span>Enhanced service experience for customers and visitors</span>
+                            </div>
+                        </div>
+                        <div class="benefit-col">
+                            <div class="benefit-item">
+                                <span class="check-icon">✓</span>
+                                <span>Simple and affordable way to strengthen recycling efforts</span>
+                            </div>
+                            <div class="benefit-item">
+                                <span class="check-icon">✓</span>
+                                <span>First-mover advantage with innovative technology</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="innovation-card">
+                    <div class="innovation-icon">🚀</div>
+                    <h3>First-Mover Innovation</h3>
+                    <p>Cycl is a pioneering solution that has never been tried elsewhere. We believe it can create
+                        positive
+                        attention, a strong guest experience, and clear green branding for forward-thinking partners.
+                    </p>
+                </div>
+
+                <a class="cta-button-large" href="kontaktnettside.html">Partner with Cycl Today</a>
+            </div>
+        </section>
+
+        <section class="section section--esg">
+            <div class="section__grid section__grid--two">
+                <div class="esg-visual">
+                    <div class="analytics-card-modern">
+                        <h3>ESG Analytics</h3>
+                        <div class="metrics-grid">
+                            <div class="metric-card">
+                                <div class="metric-value">85%</div>
+                                <div class="metric-label">Carbon Reduction</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-value">100%</div>
+                                <div class="metric-label">Green Energy</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="stack">
+                    <h2><span class="highlight-bright">Generate detailed ESG impact reports</span> and transform your
+                        business
+                        into a
+                        sustainability powerhouse</h2>
+                    <p>Elevate your corporate responsibility with Cycl's comprehensive ESG (Environmental, Social, and
+                        Governance)
+                        reporting platform. Our advanced analytics transform your recycling data into meaningful
+                        environmental
+                        impact metrics, helping you demonstrate measurable progress toward carbon neutrality and
+                        sustainable
+                        operations.</p>
+                    <ul class="checklist-modern">
+                        <li>
+                            <span class="bullet-icon">→</span>
+                            <div>
+                                <strong>Carbon Footprint Analytics</strong>
+                                <p>Track and quantify your environmental impact reduction through detailed CO₂ emissions
+                                    reports</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="bullet-icon">→</span>
+                            <div>
+                                <strong>Green Energy Integration</strong>
+                                <p>Monitor renewable energy usage and waste-to-energy conversion metrics</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="bullet-icon">→</span>
+                            <div>
+                                <strong>ESG Compliance Reporting</strong>
+                                <p>Generate investor-grade sustainability reports that align with global ESG frameworks
+                                </p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="bullet-icon">→</span>
+                            <div>
+                                <strong>Circular Economy Metrics</strong>
+                                <p>Showcase your contribution with detailed materials recovery analytics</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="section section--partners" id="partners">
+            <div class="section__narrow">
+                <h2 class="partners-title">Grow your revenue and <span class="highlight-bright">sustainability</span>
+                    with a
+                    Cycl partnership</h2>
+                <div class="partners-grid">
+                    <div class="partner-card">
+                        <img src="image/msf.jpeg" alt="MSF">
+                    </div>
+                    <div class="partner-card">
+                        <img src="image/koldingbibl.png" alt="Kolding library">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="Private" class="section section--video">
+            <div class="section__grid section__grid--two">
+                <div class="video-container">
+                    <iframe
+                        src="https://player.vimeo.com/video/769563688?autoplay=1&amp;loop=1&amp;autopause=0&amp;muted=1&amp;background=1"
+                        allow="autoplay; fullscreen; picture-in-picture" title="Cycl in action"></iframe>
+                </div>
+                <div class="stack">
+                    <h2>The future of <span class="highlight-bright">recycling is here</span></h2>
+                    <p>Take your recycling efforts to the next level and promote sustainability with CYCL's portable
+                        deposit
+                        stations. These innovative stations provide a convenient, user-friendly, and eco-friendly
+                        alternative to
+                        traditional waste bins.</p>
+                    <p>By depositing bottles at these stations, employees and customers can earn discounts from
+                        participating
+                        partners such as cinemas and restaurants via the app. Implementing CYCL's deposit stations in
+                        your business
+                        not only helps the environment but also encourages and rewards sustainable behavior.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <img src="image/87.png" alt="Cycl icon">
+                <div>
+                    <strong style="color: #ffffff;">Cycl</strong>
+                    <div style="font-size: 0.85rem;">Revolutionizing recycling through innovative technology.</div>
+                </div>
+            </div>
+
+            <div class="footer-links">
+                <a href="#home">Home</a>
+                <a href="#business">Business</a>
+                <a href="#Private">Private</a>
+                <a href="aboutus.html">About</a>
+                <a href="https://cycl-ionic.web.app/admin/esg-dashboard-modern.html" target="_blank"
+                    rel="noopener">Analytics</a>
+            </div>
+
+            <div class="footer-social">
+                <a href="mailto:team@cyclmobileapp.com" aria-label="Email Cycl">✉️</a>
+                <a href="https://www.linkedin.com/company/cycl-app/?viewAsMember=true" target="_blank" rel="noopener"
+                    aria-label="Cycl on LinkedIn">
+                    <img src="image/linkdinicon.png" alt="LinkedIn"
+                        style="width: 16px; filter: brightness(0) invert(1);">
+                </a>
+                <a href="https://www.instagram.com/cycl.app/" target="_blank" rel="noopener"
+                    aria-label="Cycl on Instagram">
+                    <img src="image/iconinsta.png" alt="Instagram"
+                        style="width: 16px; filter: brightness(0) invert(1);">
+                </a>
+            </div>
+        </div>
+        <div class="footer-note">© 2024 Cycl. All rights reserved. | CVR: 45873129</div>
+    </footer>
+
+    <script>
+        const navToggle = document.querySelector('.nav-toggle');
+        const navList = document.querySelector('.nav-list');
+        const navLinks = document.querySelectorAll('.nav-list .links');
+        const sectionIds = ['home', 'business', 'Private'];
+
+        navToggle.addEventListener('click', () => {
+            const isOpen = navList.getAttribute('data-open') === 'true';
+            const nextState = (!isOpen).toString();
+            navList.setAttribute('data-open', nextState);
+            navToggle.setAttribute('aria-expanded', nextState);
+        });
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                navList.setAttribute('data-open', 'false');
+                navToggle.setAttribute('aria-expanded', 'false');
+            });
+        });
+
+        const activateLink = (id) => {
+            navLinks.forEach(link => link.classList.remove('active'));
+            const target = document.querySelector(`.nav-list .links[href="#${id}"]`);
+            if (target) {
+                target.classList.add('active');
+            }
+        };
+
+        const handleScroll = () => {
+            const scrollPosition = window.scrollY + 140;
+            let current = 'home';
+
+            sectionIds.forEach(id => {
+                const section = document.getElementById(id);
+                if (section) {
+                    if (scrollPosition >= section.offsetTop && scrollPosition < section.offsetTop + section.offsetHeight) {
+                        current = id;
+                    }
+                }
+            });
+
+            if (window.scrollY < 120) {
+                current = 'home';
+            }
+
+            activateLink(current);
+        };
+
+        document.addEventListener('scroll', handleScroll, { passive: true });
+        window.addEventListener('resize', handleScroll);
+        window.addEventListener('load', handleScroll);
+    </script>
+    <script type="module" src="js/indexobf.js"></script>
+</body>
+
+</html>
