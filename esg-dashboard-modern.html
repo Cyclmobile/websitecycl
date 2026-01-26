@@ -1,0 +1,3311 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESG Environmental Impact Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3fb868;
+            /* Custom Green */
+            --primary-dark: #2f9e55;
+            /* Darker Green */
+            --primary-light: #6fdc92;
+            /* Lighter Green */
+            --secondary-color: #3b82f6;
+            /* Blue 500 */
+            --secondary-dark: #2563eb;
+            /* Blue 600 */
+            --accent-color: #f59e0b;
+            /* Amber 500 */
+            --surface-color: #ffffff;
+            --background-color: #ffffff;
+            /* Pure White Background */
+            --text-primary: #1e293b;
+            /* Slate 800 */
+            --text-secondary: #64748b;
+            /* Slate 500 */
+            --text-hint: #94a3b8;
+            /* Slate 400 */
+            --divider-color: #e2e8f0;
+            /* Slate 200 */
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            --border-radius: 16px;
+            --border-radius-large: 24px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --glass-bg: rgba(255, 255, 255, 0.9);
+            --glass-border: rgba(226, 232, 240, 0.8);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-weight: 400;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 32px;
+        }
+
+        /* Welcome Screen - Simple Google-like Design with Brand Theme */
+        .welcome-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            width: 100vw;
+            position: fixed;
+            top: 0;
+            left: 0;
+            text-align: center;
+            background: #ffffff;
+            /* Subtle ambient brand glow */
+            background-image:
+                radial-gradient(circle at 50% -20%, rgba(63, 184, 104, 0.15) 0%, transparent 60%),
+                radial-gradient(circle at 100% 100%, rgba(63, 184, 104, 0.05) 0%, transparent 50%);
+            color: var(--text-primary);
+            padding: 20px;
+            overflow: hidden;
+            z-index: 1000;
+        }
+
+        .background-shapes {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .shape1 {
+            width: 500px;
+            height: 500px;
+            top: -100px;
+            left: -100px;
+            background: var(--primary-color);
+            opacity: 0.08;
+        }
+
+        .shape2 {
+            width: 400px;
+            height: 400px;
+            bottom: -50px;
+            right: -50px;
+            background: #4ade80;
+            opacity: 0.1;
+            animation-delay: -5s;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+
+            50% {
+                transform: translate(20px, -20px);
+            }
+        }
+
+        .welcome-content {
+            width: 100%;
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .welcome-screen h1 {
+            font-size: clamp(3rem, 6vw, 4.5rem);
+            font-weight: 800;
+            margin: 0 0 16px 0;
+            letter-spacing: -0.04em;
+            line-height: 1.1;
+            /* Brand gradient text */
+            background: linear-gradient(135deg, #2d8a4e 0%, var(--primary-color) 50%, #66e690 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: var(--primary-color);
+            /* Fallback */
+        }
+
+        .welcome-screen .subtitle {
+            font-size: clamp(1rem, 1.5vw, 1.2rem);
+            color: var(--text-secondary);
+            font-weight: 400;
+            margin-bottom: 40px;
+            max-width: 600px;
+            line-height: 1.5;
+        }
+
+        /* Search Container within Welcome Screen - Clean & Minimal */
+        .welcome-screen .search-container {
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            padding: 0;
+            margin-bottom: 0;
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .welcome-screen .search-box {
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 32px;
+            position: relative;
+        }
+
+        .welcome-screen .search-input {
+            background: #ffffff;
+            border: 1px solid #dfe1e5;
+            color: var(--text-primary);
+            font-size: 16px;
+            padding: 16px 24px 16px 52px;
+            border-radius: 24px;
+            height: 56px;
+            box-shadow: 0 1px 6px rgba(32, 33, 36, 0.28);
+            transition: box-shadow 0.2s, border-color 0.2s;
+        }
+
+        .welcome-screen .search-input:focus {
+            border-color: var(--primary-color);
+            background: #ffffff;
+            box-shadow: 0 4px 20px rgba(63, 184, 104, 0.2);
+            outline: none;
+        }
+
+        .welcome-screen .search-input:hover {
+            box-shadow: 0 1px 6px rgba(32, 33, 36, 0.28), 0 2px 8px rgba(32, 33, 36, 0.1);
+        }
+
+        .welcome-screen .search-input::placeholder {
+            color: var(--text-hint);
+        }
+
+        .welcome-screen .search-icon {
+            color: #9aa0a6;
+            left: 16px;
+        }
+
+        .welcome-screen .search-input-wrapper:focus-within .search-icon {
+            color: var(--primary-color);
+        }
+
+        .welcome-screen .search-btn {
+            display: none;
+            /* Hide search button for cleaner Google look, or style it minimally */
+        }
+
+        /* Quick Access Card - Compact & Modern */
+        .welcome-screen .search-container .quick-access-card {
+            background: #ffffff;
+            border: 1px solid var(--divider-color);
+            border-radius: 16px;
+            padding: 16px;
+            margin: 16px 0;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            width: 100%;
+            max-width: 400px;
+            /* Smaller width */
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .welcome-screen .search-container .quick-access-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary-color);
+        }
+
+        .welcome-screen .search-container .quick-access-card-image {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .welcome-screen .search-container .quick-access-card-image::before {
+            display: none;
+        }
+
+        .welcome-screen .search-container .quick-access-card-icon {
+            width: 48px;
+            height: 48px;
+            background: transparent;
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: none;
+            color: white;
+        }
+
+        .welcome-screen .search-container .quick-access-card-content {
+            padding: 0;
+            flex: 1;
+        }
+
+        .welcome-screen .search-container .quick-access-card-header {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .welcome-screen .search-container .quick-access-card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .welcome-screen .search-container .quick-access-card-subtitle {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin: 0;
+            font-weight: 400;
+        }
+
+        .welcome-screen .search-container .quick-access-card-badge {
+            display: none;
+            /* Hide badge for cleaner look */
+        }
+
+        .welcome-screen .search-container .quick-access-card-action {
+            display: none;
+            /* Hide action button container */
+        }
+
+        .welcome-screen .search-container .quick-access-card-button {
+            display: none;
+        }
+
+        /* Header */
+        .header {
+            display: none;
+            background: var(--surface-color);
+            border-radius: var(--border-radius-large);
+            margin-bottom: 32px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--divider-color);
+            overflow: hidden;
+        }
+
+        .header.show {
+            display: block;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        .header-content {
+            padding: 40px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: white;
+            position: relative;
+        }
+
+        .header-content::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><circle cx="2" cy="2" r="1" fill="rgba(255,255,255,0.1)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Search Container */
+        .search-container {
+            background: var(--surface-color);
+            border-radius: var(--border-radius);
+            padding: 32px;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 32px;
+            border: 1px solid var(--divider-color);
+        }
+
+        .search-box {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .search-input-wrapper {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 16px 24px 16px 56px;
+            border: 2px solid var(--divider-color);
+            border-radius: 16px;
+            font-size: 16px;
+            font-family: inherit;
+            transition: var(--transition);
+            background: var(--background-color);
+            color: var(--text-primary);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background: var(--surface-color);
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-hint);
+            font-size: 24px;
+            transition: var(--transition);
+        }
+
+        .search-input-wrapper:focus-within .search-icon {
+            color: var(--primary-color);
+        }
+
+        .search-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 140px;
+            justify-content: center;
+            box-shadow: var(--shadow-md);
+        }
+
+        .search-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .download-buttons {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            opacity: 0;
+            transition: var(--transition);
+            margin-top: 24px;
+        }
+
+        .download-buttons.show {
+            opacity: 1;
+        }
+
+        .download-btn {
+            background: var(--surface-color);
+            color: var(--text-primary);
+            border: 1px solid var(--divider-color);
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .download-btn.download-pdf {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .download-btn.download-csv {
+            background: var(--surface-color);
+            color: var(--text-primary);
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .download-btn.download-csv:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .download-btn.download-pdf:hover {
+            background: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+
+        .download-info {
+            text-align: center;
+            margin-top: 16px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Quick Access Card */
+        .quick-access-card {
+            background: var(--surface-color);
+            backdrop-filter: blur(20px);
+            border: none;
+            border-radius: 24px;
+            padding: 0;
+            margin-top: 24px;
+            box-shadow: var(--shadow-lg);
+            transition: var(--transition);
+            max-width: 600px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quick-access-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .quick-access-card-image {
+            width: 100%;
+            height: 140px;
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary-color) 50%, var(--primary-dark) 100%),
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200"><defs><pattern id="leaves" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="30" cy="25" r="1.5" fill="rgba(255,255,255,0.08)"/><circle cx="20" cy="35" r="1" fill="rgba(255,255,255,0.06)"/></pattern></defs><rect width="400" height="200" fill="url(%23leaves)"/><path d="M0,120 Q100,100 200,110 T400,105 L400,200 L0,200 Z" fill="rgba(255,255,255,0.1)"/></svg>');
+            background-size: cover, 400px 200px;
+            background-position: center;
+            border-radius: 24px 24px 0 0;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quick-access-card-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border-radius: 24px 24px 0 0;
+        }
+
+        .quick-access-card-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--surface-color);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            z-index: 1;
+            color: var(--primary-color);
+        }
+
+        .quick-access-card-content {
+            padding: 32px;
+            position: relative;
+        }
+
+        .quick-access-card-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .quick-access-card-info {
+            flex: 1;
+        }
+
+        .quick-access-card-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin: 0 0 8px 0;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+        }
+
+        .quick-access-card-subtitle {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin: 0 0 16px 0;
+            font-weight: 500;
+        }
+
+        .quick-access-card-badge {
+            background: var(--primary-color);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            box-shadow: var(--shadow-sm);
+            flex-shrink: 0;
+        }
+
+        .quick-access-card-action {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid var(--divider-color);
+        }
+
+        .quick-access-card-button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 14px 32px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow-md);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .quick-access-card-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Dashboard Content */
+        .dashboard-content {
+            display: none;
+        }
+
+        .dashboard-content.show {
+            display: block;
+        }
+
+        /* Stats Grid - Material Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: var(--surface-color);
+            border-radius: var(--border-radius);
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            border: 1px solid var(--divider-color);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--primary-light);
+        }
+
+        .stat-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .stat-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: white;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+        }
+
+        .stat-card:hover .stat-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .stat-icon.bottles {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        .stat-icon.co2 {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+        }
+
+        .stat-icon.water {
+            background: linear-gradient(135deg, #06b6d4, #0891b2);
+        }
+
+        .stat-icon.energy {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+
+        .stat-icon.stations {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+        }
+
+        .stat-icon.efficiency {
+            background: linear-gradient(135deg, #ec4899, #db2777);
+        }
+
+        /* Business Metric Card Styles */
+        .stat-card.business-metric {
+            background: var(--surface-color);
+            border: 1px solid var(--divider-color);
+        }
+
+        .stat-card.business-metric:hover {
+            border-color: var(--accent-color);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .stat-icon.cost-savings {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        .stat-icon.carbon-credits {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+        }
+
+        .stat-icon.esg-score {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+
+        .stat-icon.roi {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+        }
+
+        .stat-icon.community {
+            background: linear-gradient(135deg, #ec4899, #db2777);
+        }
+
+        .stat-icon.compliance {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+        }
+
+        .stat-number {
+            font-size: 2.25rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+        }
+
+        .stat-label {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stat-subtext {
+            font-size: 0.875rem;
+            color: var(--text-hint);
+            font-weight: 500;
+        }
+
+        /* Period Selector */
+        .period-selector {
+            background: var(--surface-color);
+            border-radius: var(--border-radius);
+            padding: 32px;
+            margin-bottom: 32px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--divider-color);
+        }
+
+        .period-selector-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .period-selector-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .period-toggle {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .period-toggle:hover {
+            background: var(--primary-dark);
+            box-shadow: var(--shadow-md);
+        }
+
+        .period-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 32px;
+        }
+
+        .period-btn {
+            background: var(--surface-color);
+            color: var(--text-secondary);
+            border: 1px solid var(--divider-color);
+            padding: 12px 24px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+            font-size: 14px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .period-btn.active,
+        .period-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .custom-date-selector {
+            background: var(--background-color);
+            border-radius: var(--border-radius);
+            padding: 24px;
+            margin-top: 24px;
+            border: 1px solid var(--divider-color);
+        }
+
+        .date-range-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .date-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .date-input-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .date-input {
+            padding: 14px 16px;
+            border: 2px solid var(--divider-color);
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: var(--transition);
+            background: var(--surface-color);
+            color: var(--text-primary);
+        }
+
+        .date-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+        }
+
+        .custom-actions {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .apply-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .apply-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .reset-btn {
+            background: var(--surface-color);
+            color: var(--text-secondary);
+            border: 1px solid var(--divider-color);
+            padding: 14px 32px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .reset-btn:hover {
+            border-color: var(--text-primary);
+            color: var(--text-primary);
+            background: var(--background-color);
+        }
+
+        .period-info {
+            text-align: center;
+            margin-top: 24px;
+            padding: 16px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            color: var(--primary-dark);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            font-weight: 500;
+        }
+
+        /* Charts - Modern Material Cards */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .chart-card {
+            background: var(--surface-color);
+            border-radius: var(--border-radius);
+            padding: 32px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--divider-color);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chart-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        /* Business Chart Styling */
+        .chart-card.business-chart {
+            background: var(--surface-color);
+            border: 1px solid var(--divider-color);
+        }
+
+        .chart-card.business-chart:hover {
+            border-color: var(--accent-color);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .chart-card.business-chart .chart-title {
+            color: var(--text-primary);
+        }
+
+        .chart-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            letter-spacing: -0.01em;
+        }
+
+        .chart-title .material-icons {
+            color: var(--primary-color);
+            font-size: 28px;
+        }
+
+        .chart-card.business-chart .chart-title .material-icons {
+            color: var(--accent-color);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 320px;
+            width: 100%;
+        }
+
+        /* Stations Section */
+        .stations-section {
+            background: var(--surface-color);
+            border-radius: var(--border-radius);
+            padding: 32px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--divider-color);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            letter-spacing: -0.02em;
+        }
+
+        .station-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px;
+            margin-bottom: 16px;
+            background: var(--background-color);
+            border-radius: 16px;
+            transition: var(--transition);
+            border: 1px solid var(--divider-color);
+        }
+
+        .station-item:hover {
+            background: var(--surface-color);
+            border-color: var(--primary-color);
+            transform: translateX(4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .station-info h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .station-address {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .station-metrics {
+            font-size: 0.875rem;
+            color: var(--text-hint);
+            font-weight: 500;
+        }
+
+        .station-capacity {
+            text-align: right;
+        }
+
+        .capacity-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .capacity-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Loading States */
+        .loading-state {
+            display: none;
+            text-align: center;
+            padding: 80px 24px;
+            background: var(--surface-color);
+            border-radius: var(--border-radius);
+            margin: 32px 0;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--divider-color);
+        }
+
+        .loading-spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid var(--divider-color);
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 24px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .no-results,
+        .error-message {
+            display: none;
+            text-align: center;
+            padding: 80px 24px;
+            background: var(--surface-color);
+            border-radius: var(--border-radius);
+            margin: 32px 0;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--divider-color);
+        }
+
+        .no-results h2,
+        .error-message h2 {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+
+        .no-results p,
+        .error-message p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 16px;
+            }
+
+            .header-content {
+                padding: 24px 20px;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .search-box {
+                flex-direction: column;
+            }
+
+            .search-btn {
+                width: 100%;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .station-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 16px;
+            }
+
+            .welcome-screen {
+                padding: 20px;
+            }
+
+            .welcome-screen h1 {
+                font-size: 2rem;
+            }
+
+            .period-buttons {
+                flex-direction: column;
+            }
+
+            .period-btn {
+                width: 100%;
+            }
+
+            .quick-access-card {
+                margin-left: 0;
+                margin-right: 0;
+                padding: 24px;
+                border-radius: 20px;
+            }
+
+            .welcome-screen .search-container .quick-access-card {
+                margin: 16px 0 20px 0;
+            }
+
+            .welcome-screen .search-container .quick-access-card-image {
+                height: 100px;
+            }
+
+            .welcome-screen .search-container .quick-access-card-icon {
+                width: 64px;
+                height: 64px;
+                font-size: 20px;
+            }
+
+            .welcome-screen .search-container .quick-access-card-content {
+                padding: 20px;
+            }
+
+            .welcome-screen .search-container .quick-access-card-title {
+                font-size: 1.1rem;
+            }
+
+            .welcome-screen .search-container .quick-access-card-action {
+                flex-direction: column;
+                gap: 16px;
+                align-items: stretch;
+            }
+
+            .welcome-screen .search-container .quick-access-card-button {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .chart-container {
+                height: 250px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .header-content {
+                padding: 20px 16px;
+            }
+
+            .stat-card {
+                padding: 20px;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+
+            .download-buttons {
+                flex-direction: column;
+            }
+
+            .download-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .welcome-content {
+                padding: 0 20px;
+            }
+
+            .welcome-screen .search-container {
+                padding: 20px;
+            }
+
+            .welcome-screen .search-container .quick-access-card {
+                margin: 16px 0 20px 0;
+            }
+
+            .welcome-screen .search-container .quick-access-card-image {
+                height: 90px;
+            }
+
+            .welcome-screen .search-container .quick-access-card-icon {
+                width: 56px;
+                height: 56px;
+                font-size: 18px;
+            }
+
+            .welcome-screen .search-container .quick-access-card-content {
+                padding: 16px;
+            }
+
+            .welcome-screen .search-container .quick-access-card-title {
+                font-size: 1rem;
+            }
+
+            .welcome-screen .search-container .quick-access-card-subtitle {
+                font-size: 0.8rem;
+            }
+
+            .welcome-screen .search-container .quick-access-card-button {
+                padding: 10px 20px;
+                font-size: 12px;
+            }
+        }
+
+        /* Remember Me Checkbox Styles */
+        .remember-me-container {
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding-left: 30px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-secondary);
+            user-select: none;
+        }
+
+        .checkbox-container input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 20px;
+            width: 20px;
+            background-color: #fff;
+            border: 2px solid #dfe1e5;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .checkbox-container:hover input~.checkmark {
+            border-color: var(--primary-color);
+        }
+
+        .checkbox-container input:checked~.checkmark {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+
+        .checkbox-container input:checked~.checkmark:after {
+            display: block;
+        }
+
+        .checkbox-container .checkmark:after {
+            left: 6px;
+            top: 2px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        .checkbox-label {
+            font-weight: 500;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Welcome Screen (shown initially) - Full Screen -->
+    <div class="welcome-screen" id="welcomeScreen">
+        <div class="background-shapes">
+            <div class="shape shape1"></div>
+            <div class="shape shape2"></div>
+            <div class="shape shape3"></div>
+            <div class="shape shape4"></div>
+        </div>
+        <div class="welcome-content">
+            <div class="search-container">
+                <h1>ESG Analytics Dashboard</h1>
+                <p class="subtitle">Track environmental impact and business value in real-time</p>
+
+                <div class="search-box">
+                    <div class="search-input-wrapper">
+                        <span class="material-icons search-icon">search</span>
+                        <input type="text" class="search-input" id="searchInput" placeholder="Enter company name">
+                    </div>
+                    <button class="search-btn" onclick="searchStations()">
+                        <span class="material-icons">search</span>
+                        Search
+                    </button>
+                </div>
+
+                <!-- Remember Me Checkbox -->
+                <div class="remember-me-container">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="rememberMeCheckbox">
+                        <span class="checkmark"></span>
+                        <span class="checkbox-label">Remember my choice and skip welcome screen next time</span>
+                    </label>
+                </div>
+
+                <!-- Quick Access Card -->
+                <div class="quick-access-card" id="quickAccessCard" style="display: none;">
+                    <!-- Content will be populated by JavaScript -->
+                </div>
+
+                <div class="download-buttons" id="downloadButtons">
+                    <button class="download-btn download-csv" onclick="smartDownloadCSV()">
+                        <span class="material-icons">file_download</span>
+                        Download CSV Report
+                    </button>
+                    <button class="download-btn download-pdf" onclick="smartDownloadPDF()">
+                        <span class="material-icons">picture_as_pdf</span>
+                        Download PDF Report
+                    </button>
+                    <div class="download-info" id="downloadInfo">
+                        Complete ESG & business analytics included
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container"> <!-- Header (shown after search) -->
+        <div class="header" id="mainHeader">
+            <div class="header-content">
+                <h1 id="headerTitle">Company Name ESG Impact Report</h1>
+                <p id="locationName"></p>
+                <button id="resetWelcomeBtn" class="reset-welcome-btn"
+                    style="display: none; margin-top: 10px; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 6px 12px; border-radius: 20px; cursor: pointer; font-size: 12px; align-items: center; gap: 6px; z-index: 1000; position: relative; pointer-events: auto;">
+                    <span class="material-icons" style="font-size: 14px;">restart_alt</span> Show Welcome Screen Next
+                    Time
+                </button>
+            </div>
+        </div>
+
+        <!-- Search Container (for subsequent searches) -->
+        <div class="search-container" id="searchContainer" style="display: none;">
+            <div class="search-box">
+                <div class="search-input-wrapper">
+                    <span class="material-icons search-icon">search</span>
+                    <input type="text" class="search-input" id="searchInput2" placeholder="Enter company name">
+                </div>
+                <button class="search-btn" onclick="searchStations()">
+                    <span class="material-icons">search</span>
+                    Search
+                </button>
+            </div>
+            <div class="download-buttons" id="downloadButtons2">
+                <button class="download-btn download-csv" onclick="smartDownloadCSV()">
+                    <span class="material-icons">file_download</span>
+                    Download Complete CSV Report
+                </button>
+                <button class="download-btn download-pdf" onclick="smartDownloadPDF()">
+                    <span class="material-icons">picture_as_pdf</span>
+                    Download Complete PDF Report
+                </button>
+            </div>
+        </div>
+
+        <!-- Period Selector -->
+        <div class="period-selector" id="periodSelector" style="display: none;">
+            <div class="period-selector-header">
+                <h3 class="period-selector-title">
+                    <span class="material-icons">date_range</span>
+                    Date Range Selection
+                </h3>
+            </div>
+
+            <div class="custom-date-selector active" id="customDateSelector">
+                <div class="date-range-grid">
+                    <div class="date-input-group">
+                        <label class="date-input-label">
+                            <span class="material-icons">event</span>
+                            From Month
+                        </label>
+                        <input type="month" class="date-input" id="fromMonth" />
+                    </div>
+
+                    <div class="date-input-group">
+                        <label class="date-input-label">
+                            <span class="material-icons">event</span>
+                            To Month
+                        </label>
+                        <input type="month" class="date-input" id="toMonth" />
+                    </div>
+                </div>
+
+                <div class="custom-actions">
+                    <button class="apply-btn" onclick="applyCustomPeriod()">
+                        <span class="material-icons">check</span>
+                        Apply Filter
+                    </button>
+                    <button class="reset-btn" onclick="resetCustomPeriod()">
+                        Reset
+                    </button>
+                </div>
+
+                <div class="period-info" id="periodInfo">
+                    Select a date range to filter environmental impact data
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div class="loading-state" id="loadingState">
+            <div class="loading-spinner"></div>
+            <h2>Analyzing Environmental Data</h2>
+            <p>Processing station metrics and calculating impact...</p>
+        </div>
+
+        <!-- Dashboard Content -->
+        <div class="dashboard-content" id="dashboardContent">
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon bottles">
+                            <span class="material-icons">eco</span>
+                        </div>
+                        <div>
+                            <div class="stat-label">Bottles Recycled</div>
+                            <div class="stat-subtext" id="bottlesSubtext">This month</div>
+                        </div>
+                    </div>
+                    <div class="stat-number" id="totalBottles">0</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon co2">
+                            <span class="material-icons">cloud</span>
+                        </div>
+                        <div>
+                            <div class="stat-label">CO₂ Saved</div>
+                            <div class="stat-subtext" id="co2Subtext">Environmental impact</div>
+                        </div>
+                    </div>
+                    <div class="stat-number" id="co2Saved">0 kg</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon water">
+                            <span class="material-icons">water_drop</span>
+                        </div>
+                        <div>
+                            <div class="stat-label">Water Saved</div>
+                            <div class="stat-subtext" id="waterSubtext">Resource conservation</div>
+                        </div>
+                    </div>
+                    <div class="stat-number" id="waterSaved">0 L</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon energy">
+                            <span class="material-icons">bolt</span>
+                        </div>
+                        <div>
+                            <div class="stat-label">Energy Saved</div>
+                            <div class="stat-subtext" id="energySubtext">Renewable equivalent</div>
+                        </div>
+                    </div>
+                    <div class="stat-number" id="energySaved">0 kWh</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon stations">
+                            <span class="material-icons">location_on</span>
+                        </div>
+                        <div>
+                            <div class="stat-label">Active Stations</div>
+                            <div class="stat-subtext" id="stationsSubtext">In searched area</div>
+                        </div>
+                    </div>
+                    <div class="stat-number" id="stationsCount">0</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon efficiency">
+                            <span class="material-icons">trending_up</span>
+                        </div>
+                        <div>
+                            <div class="stat-label">Efficiency</div>
+                            <div class="stat-subtext" id="efficiencySubtext">Station utilization</div>
+                        </div>
+                    </div>
+                    <div class="stat-number" id="avgEfficiency">0%</div>
+                </div>
+
+                <!-- Business Value Metrics -->
+                <div class="stat-card business-metric">
+                    <div class="stat-header">
+                        <div class="stat-icon cost-savings">
+                            <span class="material-icons">savings</span>
+                        </div>
+                        <div>
+                            <div class="stat-label">Cost Savings</div>
+                            <div class="stat-subtext">Waste management</div>
+                        </div>
+                    </div>
+                    <div class="stat-number" id="costSavings">$0</div>
+                </div>
+
+                <div class="stat-card business-metric">
+                    <div class="stat-header">
+                        <div class="stat-icon carbon-credits">
+                            <span class="material-icons">monetization_on</span>
+                        </div>
+                        <div>
+                            <div class="stat-label">Carbon Credit Value</div>
+                            <div class="stat-subtext">Market equivalent</div>
+                        </div>
+                    </div>
+                    <div class="stat-number" id="carbonCreditValue">$0</div>
+                </div>
+
+                <div class="stat-card business-metric">
+                    <div class="stat-header">
+                        <div class="stat-icon esg-score">
+                            <span class="material-icons">star</span>
+                        </div>
+                        <div>
+                            <div class="stat-label">ESG Score</div>
+                            <div class="stat-subtext">Sustainability rating</div>
+                        </div>
+                    </div>
+                    <div class="stat-number" id="esgScore">0/100</div>
+                </div>
+
+                <div class="stat-card business-metric">
+                    <div class="stat-header">
+                        <div class="stat-icon roi">
+                            <span class="material-icons">assessment</span>
+                        </div>
+                        <div>
+                            <div class="stat-label">ROI</div>
+                            <div class="stat-subtext">Return on investment</div>
+                        </div>
+                    </div>
+                    <div class="stat-number" id="roiValue">0%</div>
+                </div>
+
+                <div class="stat-card business-metric">
+                    <div class="stat-header">
+                        <div class="stat-icon community">
+                            <span class="material-icons">groups</span>
+                        </div>
+                        <div>
+                            <div class="stat-label">Total Users Impacted</div>
+                            <div class="stat-subtext">Registered app users</div>
+                        </div>
+                    </div>
+                    <div class="stat-number" id="communityImpact">0</div>
+                </div>
+
+                <div class="stat-card business-metric">
+                    <div class="stat-header">
+                        <div class="stat-icon compliance">
+                            <span class="material-icons">verified</span>
+                        </div>
+                        <div>
+                            <div class="stat-label">EPR Compliance</div>
+                            <div class="stat-subtext">Extended producer responsibility</div>
+                        </div>
+                    </div>
+                    <div class="stat-number" id="eprCompliance">0 kg</div>
+                </div>
+            </div>
+
+            <!-- Charts Grid -->
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h3 class="chart-title">
+                        <span class="material-icons">pie_chart</span>
+                        Monthly Trends
+                    </h3>
+                    <div class="chart-container">
+                        <canvas id="monthlyChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <h3 class="chart-title">
+                        <span class="material-icons">bar_chart</span>
+                        Environmental Impact
+                    </h3>
+                    <div class="chart-container">
+                        <canvas id="impactChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <h3 class="chart-title">
+                        <span class="material-icons">calendar_today</span>
+                        Station Capacity
+                    </h3>
+                    <div class="chart-container">
+                        <canvas id="stationChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <h3 class="chart-title">
+                        <span class="material-icons">access_time</span>
+                        Hourly Usage Patterns
+                    </h3>
+                    <div class="chart-container">
+                        <canvas id="hourlyUsageChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <h3 class="chart-title">
+                        <span class="material-icons">calendar_today</span>
+                        Day of Week Usage
+                    </h3>
+                    <div class="chart-container">
+                        <canvas id="dailyUsageChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Business-Focused Charts -->
+                <div class="chart-card business-chart">
+                    <h3 class="chart-title">
+                        <span class="material-icons">attach_money</span>
+                        UN SDG Progress
+                    </h3>
+                    <div class="chart-container">
+                        <canvas id="sdgChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-card business-chart">
+                    <h3 class="chart-title">
+                        <span class="material-icons">attach_money</span>
+                        Business Value Created
+                    </h3>
+                    <div class="chart-container">
+                        <canvas id="businessValueChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stations List -->
+            <div class="stations-section">
+                <h2 class="section-title">
+                    <span class="material-icons">location_city</span>
+                    Station Details
+                </h2>
+                <div id="stationsList">
+                    <!-- Station items will be populated here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- No Results -->
+        <div class="no-results" id="noResults">
+            <h2>No Stations Found</h2>
+            <p>Try searching for a different location or check your spelling.</p>
+        </div>
+
+        <!-- Error Message -->
+        <div class="error-message" id="errorMessage">
+            <h2>Unable to Load Data</h2>
+            <p>Please check your connection and try again.</p>
+        </div>
+    </div>
+
+    <script type="module" src="esg-dashboard-obf.js"></script>
+
+    <script>
+        // Initialize date inputs with current month/year and set max date
+        function initializeDateInputs() {
+            const now = new Date();
+            const currentMonth = now.toISOString().slice(0, 7); // YYYY-MM format
+
+            // Set default values
+            document.getElementById('fromMonth').value = currentMonth;
+            document.getElementById('toMonth').value = currentMonth;
+
+            // Set max date to current month to prevent future selections
+            document.getElementById('fromMonth').setAttribute('max', currentMonth);
+            document.getElementById('toMonth').setAttribute('max', currentMonth);
+        }
+
+        // Apply custom period filter
+        function applyCustomPeriod() {
+            const fromMonth = document.getElementById('fromMonth').value;
+            const toMonth = document.getElementById('toMonth').value;
+
+            if (!fromMonth || !toMonth) {
+                showNotification('Please select both from and to months', 'warning');
+                return;
+            }
+
+            if (fromMonth > toMonth) {
+                showNotification('From month cannot be later than to month', 'error');
+                return;
+            }
+
+            // Create custom period object
+            const customPeriod = {
+                type: 'custom',
+                fromMonth,
+                toMonth
+            };
+
+            // Apply the filter
+            setCustomPeriod(customPeriod);
+            updatePeriodInfo();
+        }
+
+        // Reset custom period
+        function resetCustomPeriod() {
+            // Set both from and to month to current month
+            const now = new Date();
+            const currentMonth = now.toISOString().slice(0, 7); // Format: YYYY-MM
+
+            document.getElementById('fromMonth').value = currentMonth;
+            document.getElementById('toMonth').value = currentMonth;
+
+            // Create custom period for current month
+            const customPeriod = {
+                fromMonth: currentMonth,
+                toMonth: currentMonth,
+                type: 'custom'
+            };
+
+            // Apply the current month filter
+            setCustomPeriod(customPeriod);
+            updatePeriodInfo();
+            showNotification('Period reset to current month', 'info');
+        }
+
+        // Update period info display
+        function updatePeriodInfo() {
+            const periodInfo = document.getElementById('periodInfo');
+            const fromMonth = document.getElementById('fromMonth').value;
+            const toMonth = document.getElementById('toMonth').value;
+
+            if (fromMonth && toMonth) {
+                const fromDate = new Date(fromMonth + '-01');
+                const toDate = new Date(toMonth + '-01');
+
+                const fromText = fromDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+                const toText = toDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+                const infoText = `Showing data from ${fromText} to ${toText}`;
+
+                periodInfo.innerHTML = `📊 ${infoText}`;
+                periodInfo.style.background = 'rgba(46, 204, 113, 0.1)';
+                periodInfo.style.borderColor = 'rgba(46, 204, 113, 0.3)';
+                periodInfo.style.color = 'rgba(46, 204, 113, 0.9)';
+            } else {
+                periodInfo.innerHTML = 'Select a date range to filter environmental impact data';
+                periodInfo.style.background = 'rgba(79, 172, 254, 0.1)';
+                periodInfo.style.borderColor = 'rgba(79, 172, 254, 0.2)';
+                periodInfo.style.color = 'rgba(79, 172, 254, 0.9)';
+            }
+        }
+
+        // Set custom period (enhanced version of setPeriod)
+        function setCustomPeriod(customPeriod) {
+            // Store current custom period
+            window.currentCustomPeriod = customPeriod;
+
+            // Call the dashboard's setCustomPeriod method with the correct format
+            if (window.dashboard && window.dashboard.setCustomPeriod) {
+                window.dashboard.setCustomPeriod(customPeriod);
+            } else {
+                console.warn('Dashboard not ready, storing custom period for later use');
+                // Fallback: use our own data aggregation
+                aggregateDataByCustomPeriod(customPeriod);
+            }
+        }
+
+        // Enhanced data aggregation for custom periods
+        function aggregateDataByCustomPeriod(customPeriod) {
+            // First try to get data from the dashboard instance
+            let stationsData = [];
+
+            if (window.dashboard && window.dashboard.stations) {
+                stationsData = window.dashboard.stations;
+            } else if (window.allStationsData) {
+                stationsData = window.allStationsData;
+            }
+
+            if (!stationsData || stationsData.length === 0) {
+                // Show empty state if no data available
+                showEmptyDataState('No station data available for analysis');
+                return;
+            }
+
+            let filteredData;
+
+            if (!customPeriod) {
+                // No filter - show all data
+                filteredData = stationsData;
+            } else {
+                // Apply custom period filter
+                filteredData = getFilteredDataForCustomPeriod(customPeriod, stationsData);
+
+                if (filteredData.length === 0) {
+                    // Show empty state for selected period
+                    const fromDate = new Date(customPeriod.fromMonth + '-01');
+                    const toDate = new Date(customPeriod.toMonth + '-01');
+                    const fromText = fromDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+                    const toText = toDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+                    showEmptyDataState(`No data found for the period ${fromText} to ${toText}`);
+                    return;
+                }
+            }
+
+            // Calculate aggregated metrics from filtered data
+            // For now, use existing dashboard metrics if available, or calculate basic metrics
+            if (window.dashboard && window.dashboard.currentData) {
+                const dashboardData = window.dashboard.currentData;
+
+                // Update with existing dashboard metrics
+                updateDashboardMetrics({
+                    totalPlastic: dashboardData.totalBottles || '0',
+                    co2Saved: dashboardData.impact?.co2Saved || '0.00',
+                    energySaved: dashboardData.impact?.energySaved || '0.00',
+                    waterSaved: dashboardData.impact?.waterSaved || '0.00',
+                    recordCount: filteredData.length
+                });
+
+                // Show success message
+                if (customPeriod) {
+                    console.log('DEBUG: filteredData:', filteredData);
+                    console.log('DEBUG: filteredData.length:', filteredData.length);
+                    console.log('DEBUG: typeof filteredData:', typeof filteredData);
+
+                    const resultCount = Array.isArray(filteredData) ? filteredData.length : 'unknown';
+                    showNotification('Applied custom filter: ' + resultCount + ' stations found', 'success');
+                    console.log('Custom period filter applied:', customPeriod, 'Results:', resultCount);
+                } else {
+                    const resultCount = Array.isArray(filteredData) ? filteredData.length : 'unknown';
+                    showNotification('Showing all data: ' + resultCount + ' stations', 'info');
+                    console.log('Showing all data:', resultCount, 'stations');
+                }
+
+                // Debug: log current data sources
+                console.log('Data sources check:', {
+                    dashboardStations: window.dashboard ? window.dashboard.stations?.length : 'not found',
+                    dashboardCurrentData: window.dashboard ? !!window.dashboard.currentData : 'not found',
+                    allStationsData: window.allStationsData ? window.allStationsData.length : 'not found'
+                });
+            } else {
+                // Fallback calculation
+                const totalBottles = filteredData.reduce((sum, station) => {
+                    return sum + (parseInt(station.currentCap) || 0);
+                }, 0);
+
+                const co2Saved = totalBottles * 0.5; // Approximate CO2 savings
+                const energySaved = totalBottles * 1.2; // Approximate energy savings
+                const waterSaved = totalBottles * 0.8; // Approximate water savings
+
+                updateDashboardMetrics({
+                    totalPlastic: totalBottles.toString(),
+                    co2Saved: co2Saved.toFixed(2),
+                    energySaved: energySaved.toFixed(2),
+                    waterSaved: waterSaved.toFixed(2),
+                    recordCount: filteredData.length
+                });
+
+                showNotification(`Calculated metrics: ${filteredData.length} stations processed`, 'success');
+            }
+
+            // Update charts with filtered data
+            updateChartsWithFilteredData(filteredData);
+        }        // Helper function to get filtered data for current custom period
+        function getFilteredDataForCustomPeriod(customPeriod) {
+            // Get data from dashboard instance or fallback to global variable
+            let stationsData = [];
+
+            if (window.dashboard && window.dashboard.stations) {
+                stationsData = window.dashboard.stations;
+            } else if (window.allStationsData) {
+                stationsData = window.allStationsData;
+            }
+
+            if (!stationsData || stationsData.length === 0) {
+                console.warn('No station data available for filtering. This might be why the report is short.');
+                return [];
+            }
+
+            if (!customPeriod) {
+                // Return all data if no custom period
+                console.log('No custom period specified, returning all data:', stationsData.length, 'records');
+                return stationsData;
+            }
+
+            const fromDate = new Date(customPeriod.fromMonth + '-01');
+            const toDate = new Date(customPeriod.toMonth + '-01');
+            toDate.setMonth(toDate.getMonth() + 1); // Include the entire end month
+            toDate.setDate(0); // Set to last day of the end month
+            toDate.setHours(23, 59, 59, 999); // Include the entire end day
+
+            console.log(`Filtering data from ${fromDate.toDateString()} to ${toDate.toDateString()}`);
+            console.log('Total available data before filtering:', stationsData.length, 'records');
+
+            const filteredData = stationsData.filter(record => {
+                // Try different date field names that might exist in the station data
+                let recordDate = null;
+
+                if (record.timestamp) {
+                    if (record.timestamp.toDate) {
+                        recordDate = record.timestamp.toDate();
+                    } else if (record.timestamp instanceof Date) {
+                        recordDate = record.timestamp;
+                    } else {
+                        recordDate = new Date(record.timestamp);
+                    }
+                } else if (record.date) {
+                    recordDate = record.date.toDate ? record.date.toDate() : new Date(record.date);
+                } else if (record.createdAt) {
+                    recordDate = record.createdAt.toDate ? record.createdAt.toDate() : new Date(record.createdAt);
+                } else if (record.lastUpdated) {
+                    recordDate = record.lastUpdated.toDate ? record.lastUpdated.toDate() : new Date(record.lastUpdated);
+                } else {
+                    // If no date field found, assume it's recent data and include it
+                    console.log('Record with no date field found, including in results:', record);
+                    return true;
+                }
+
+                // Check if the record date is valid
+                if (!recordDate || isNaN(recordDate.getTime())) {
+                    console.warn('Invalid date found in record:', record);
+                    return false;
+                }
+
+                const inDateRange = recordDate >= fromDate && recordDate <= toDate;
+
+                if (inDateRange) {
+                    console.log('Record included:', recordDate.toDateString(), record);
+                }
+
+                return inDateRange;
+            });
+
+            console.log(`Filtered data: ${filteredData.length} records out of ${stationsData.length} total records`);
+
+            // If we get very few results, log some debug info
+            if (filteredData.length < 10 && stationsData.length > 10) {
+                console.warn('Very few records in filtered results. Sample of available data:');
+                stationsData.slice(0, 5).forEach((record, index) => {
+                    console.log(`Sample record ${index}:`, record);
+                });
+            }
+
+            return filteredData;
+        }
+
+        // Update dashboard metrics with new data
+        function updateDashboardMetrics(metrics) {
+            // Update stat cards if they exist
+            const statCards = document.querySelectorAll('.stat-number');
+            if (statCards.length >= 4) {
+                statCards[0].textContent = metrics.totalPlastic;
+                statCards[1].textContent = metrics.co2Saved + ' kg';
+                statCards[2].textContent = metrics.energySaved + ' kWh';
+                statCards[3].textContent = metrics.waterSaved + ' L';
+            }
+
+            // Update any additional metric displays
+            const recordCountElement = document.getElementById('recordCount');
+            if (recordCountElement) {
+                recordCountElement.textContent = `${metrics.recordCount} records`;
+            }
+        }
+
+        // Update charts with filtered data
+        function updateChartsWithFilteredData(filteredData) {
+            // This function would integrate with the existing chart updating logic
+            // For now, we'll just trigger a refresh if the dashboard instance exists
+            if (window.dashboard && window.dashboard.updateChartsWithData) {
+                window.dashboard.updateChartsWithData(filteredData);
+            }
+        }
+
+        // Show empty data state
+        function showEmptyDataState(message) {
+            // Reset all metrics to zero
+            updateDashboardMetrics({
+                totalPlastic: '0.00',
+                co2Saved: '0.00',
+                energySaved: '0.00',
+                waterSaved: '0.00',
+                recordCount: 0
+            });
+
+            // Show empty state message
+            showNotification(message, 'info');
+
+            // Clear charts or show empty state
+            clearCharts();
+        }
+
+        // Clear charts when no data
+        function clearCharts() {
+            const charts = ['monthlyChart', 'impactChart', 'stationChart', 'weeklyChart'];
+            charts.forEach(chartId => {
+                const canvas = document.getElementById(chartId);
+                if (canvas) {
+                    const ctx = canvas.getContext('2d');
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                    // Add "No Data" text
+                    ctx.fillStyle = '#757575';
+                    ctx.font = '16px Inter';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('No data for selected period', canvas.width / 2, canvas.height / 2);
+                }
+            });
+        }
+
+        // Show notification function
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.innerHTML = getNotificationIcon(type) + ' ' + message;
+
+            const colors = {
+                success: 'rgba(46, 204, 113, 0.9)',
+                info: 'rgba(79, 172, 254, 0.9)',
+                warning: 'rgba(255, 193, 7, 0.9)',
+                error: 'rgba(220, 53, 69, 0.9)'
+            };
+
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${colors[type] || colors.info};
+                color: white;
+                padding: 16px 24px;
+                border-radius: 12px;
+                font-weight: 500;
+                z-index: 10000;
+                backdrop-filter: blur(10px);
+                animation: slideIn 0.3s ease-out;
+                max-width: 400px;
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            `;
+
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 4000);
+        }
+
+        // Get notification icon based on type
+        function getNotificationIcon(type) {
+            const icons = {
+                success: '✅',
+                info: 'ℹ️',
+                warning: '⚠️',
+                error: '❌'
+            };
+            return icons[type] || icons.info;
+        }
+
+        // Add CSS animation keyframes
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            // Set current month/year as default and initialize date constraints
+            initializeDateInputs();
+        });
+
+        // Smart download functions that use custom period if available
+        function smartDownloadCSV() {
+            if (window.currentCustomPeriod) {
+                downloadCustomCSV();
+            } else if (window.downloadCSV) {
+                window.downloadCSV();
+            } else {
+                alert('Download function not available');
+            }
+        }
+
+        function smartDownloadPDF() {
+            if (window.downloadPDF) {
+                window.downloadPDF();
+            } else if (window.currentCustomPeriod) {
+                downloadCustomPDF();
+            } else {
+                alert('Download function not available');
+            }
+        }
+
+        // Enhanced download functions for custom periods
+        function downloadCustomCSV() {
+            if (!window.currentCustomPeriod) {
+                // Fallback to regular download
+                if (window.downloadCSV) {
+                    window.downloadCSV();
+                }
+                return;
+            }
+
+            // Get comprehensive dashboard data if available
+            let dashboardData = null;
+            if (window.dashboard && window.dashboard.currentData) {
+                dashboardData = window.dashboard.currentData;
+            }
+
+            if (!dashboardData) {
+                alert('Comprehensive dashboard data not available. Please search for a location first.');
+                return;
+            }
+
+            const customPeriod = window.currentCustomPeriod;
+            const fromDate = new Date(customPeriod.fromMonth + '-01');
+            const toDate = new Date(customPeriod.toMonth + '-01');
+            const fromText = fromDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+            const toText = toDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+            console.log(`Generating comprehensive CSV for period: ${fromText} to ${toText}`);
+
+            // Calculate business value using dashboard's method
+            let totalBusinessValue = {};
+            if (window.dashboard && window.dashboard.calculateBusinessValue) {
+                totalBusinessValue = window.dashboard.calculateBusinessValue(dashboardData.totalBottles);
+            } else {
+                // Fallback calculation
+                totalBusinessValue = {
+                    wasteManagementSavings: (dashboardData.totalBottles * 0.1).toFixed(0),
+                    materialValue: (dashboardData.totalBottles * 0.15).toFixed(0),
+                    carbonCreditValue: ((parseFloat(dashboardData.impact.co2Saved) / 1000) * 25).toFixed(2),
+                    roi: 33,
+                    esgScore: 16,
+                    communityImpact: 162,
+                    eprCompliance: parseFloat(dashboardData.impact.plasticDiverted).toFixed(2)
+                };
+            }
+
+            // Create comprehensive CSV content with all business metrics
+            let csvContent = "Report Type,Custom Period ESG & Business Impact Report\n";
+            csvContent += `Reporting Period,${fromText} to ${toText}\n`;
+            csvContent += `Report Generated,${new Date().toLocaleDateString()}\n`;
+            csvContent += `Location,${document.getElementById('searchInput').value || document.getElementById('searchInput2').value || 'All Locations'}\n`;
+            csvContent += "\n";
+
+            // Environmental Impact Overview
+            csvContent += "ENVIRONMENTAL IMPACT OVERVIEW\n";
+            csvContent += "Metric,Value,Unit,Impact Category\n";
+            csvContent += `Bottles Recycled,${dashboardData.totalBottles.toLocaleString()},units,Resource Recovery\n`;
+            csvContent += `CO2 Saved,${dashboardData.impact.co2Saved},kg,Environmental Impact\n`;
+            csvContent += `Water Saved,${dashboardData.impact.waterSaved},L,Resource Conservation\n`;
+            csvContent += `Energy Saved,${dashboardData.impact.energySaved},kWh,Energy Efficiency\n`;
+            csvContent += `Plastic Diverted,${dashboardData.impact.plasticDiverted},kg,Circular Economy\n`;
+            csvContent += "\n";
+
+            // Key Business Metrics
+            csvContent += "KEY BUSINESS METRICS\n";
+            csvContent += "Category,Metric,Value,Unit\n";
+            csvContent += `Financial Impact,Total Cost Savings,$${(parseFloat(totalBusinessValue.wasteManagementSavings) + parseFloat(totalBusinessValue.materialValue)).toLocaleString()},USD\n`;
+            csvContent += `Financial Impact,Carbon Credit Value,$${totalBusinessValue.carbonCreditValue},USD\n`;
+            csvContent += `Financial Impact,ROI,${totalBusinessValue.roi},%\n`;
+            csvContent += `ESG Performance,ESG Score,${totalBusinessValue.esgScore},/100\n`;
+            csvContent += `ESG Performance,Total Users Impacted,${totalBusinessValue.communityImpact},registered users\n`;
+            csvContent += `ESG Performance,EPR Compliance,${totalBusinessValue.eprCompliance},kg\n`;
+            csvContent += "\n";
+
+            // UN SDG Progress
+            csvContent += "UN SDG PROGRESS\n";
+            csvContent += "SDG,Goal,Progress,Unit\n";
+            const co2Saved = parseFloat(dashboardData.impact.co2Saved);
+            const waterSaved = parseFloat(dashboardData.impact.waterSaved);
+            const energySaved = parseFloat(dashboardData.impact.energySaved);
+            const plasticDiverted = parseFloat(dashboardData.impact.plasticDiverted);
+
+            csvContent += `SDG 6,Clean Water,${(waterSaved * 0.95).toFixed(1)},L protected\n`;
+            csvContent += `SDG 7,Clean Energy,${energySaved},kWh equivalent\n`;
+            csvContent += `SDG 11,Sustainable Cities,${plasticDiverted},kg diverted\n`;
+            csvContent += `SDG 12,Responsible Consumption,${dashboardData.totalBottles},units recycled\n`;
+            csvContent += `SDG 13,Climate Action,${co2Saved},kg CO2 reduced\n`;
+            csvContent += "\n";
+
+            // Station Performance Details
+            if (window.dashboard && window.dashboard.stations && window.dashboard.stations.length > 0) {
+                csvContent += "STATION PERFORMANCE DETAILS\n";
+                csvContent += "Station ID,Company,Address,Current Bottles,Max Capacity,Fill %,CO2 Saved,Water Saved,Energy Saved,Cost Savings,Carbon Credits,ESG Score\n";
+
+                window.dashboard.stations.forEach(station => {
+                    const stationData = window.dashboard.calculateStationData ?
+                        window.dashboard.calculateStationData(station) :
+                        {
+                            fillPercentage: ((station.currentCap || 0) / (station.maxCap || 1) * 100).toFixed(1),
+                            co2: ((station.currentCap || 0) * 0.08).toFixed(1),
+                            water: ((station.currentCap || 0) * 0.5).toFixed(0),
+                            energy: ((station.currentCap || 0) * 0.15).toFixed(1),
+                            savings: ((station.currentCap || 0) * 0.1).toFixed(0),
+                            credits: ((station.currentCap || 0) * 2).toFixed(0),
+                            esgScore: 16
+                        };
+
+                    csvContent += `${station.stationId || 'Unknown'},${station.companyName || 'Unknown Company'},"${station.address || 'Unknown Address'}",${station.currentCap || 0},${station.maxCap || 0},${stationData.fillPercentage}%,${stationData.co2}kg,${stationData.water}L,${stationData.energy}kWh,$${stationData.savings},$${stationData.credits},${stationData.esgScore}/100\n`;
+                });
+                csvContent += "\n";
+            }
+
+            // Methodology section
+            csvContent += "METHODOLOGY & DATA SOURCES\n";
+            csvContent += "Category,Description\n";
+            csvContent += `Data Collection,Real-time bottle collection data from AI enabled Cycl stations\n`;
+            csvContent += `Data Collection,Automated tracking and verification through Firebase cloud database\n`;
+            csvContent += `Data Collection,Geographic and temporal data aggregation for comprehensive analysis\n`;
+            csvContent += `Industry Standards,Environmental impact calculations based on ISO 14040/14044 LCA standards\n`;
+            csvContent += `Industry Standards,Carbon pricing aligned with EU ETS and voluntary carbon markets\n`;
+            csvContent += `Industry Standards,UN SDG progress tracking using established indicators\n`;
+            csvContent += `Data Source,Real-time collection data from Cycl stations (${fromText} to ${toText})\n`;
+            csvContent += `Report Generated By,Cycl ESG Analytics Platform\n`;
+
+            // Download the file
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+
+            const filename = `cycl-comprehensive-esg-report-${customPeriod.fromMonth}-to-${customPeriod.toMonth}-${new Date().toISOString().split('T')[0]}.csv`;
+            link.download = filename;
+
+            link.click();
+            window.URL.revokeObjectURL(url);
+
+            showDownloadSuccess(`Comprehensive CSV Report Generated!\nPeriod: ${fromText} to ${toText}\nIncludes: Environmental impact, business metrics, UN SDG progress, and station performance details.`);
+        }
+
+        async function downloadCustomPDF() {
+            if (!window.currentCustomPeriod) {
+                if (window.downloadPDF) window.downloadPDF();
+                return;
+            }
+            if (!window.jspdf) {
+                alert('PDF library not loaded. Please try again.');
+                return;
+            }
+
+            let dashboardData = window.dashboard?.currentData;
+            if (!dashboardData) {
+                alert('Comprehensive dashboard data not available. Please search for a location first.');
+                return;
+            }
+
+            const { jsPDF } = window.jspdf;
+            // Start in Portrait for Cover
+            const doc = new jsPDF('p', 'mm', 'a4');
+
+            // Colors
+            const colors = {
+                light: '#c0c7be',
+                gradientStart: '#5c7257',
+                gradientMid: '#2f472c',
+                gradientEnd: '#1f371c',
+                white: '#ffffff',
+                textDark: '#1f371c'
+            };
+
+            let width = doc.internal.pageSize.getWidth();
+            let height = doc.internal.pageSize.getHeight();
+
+            // --- BEAUTIFUL ENVIRONMENTAL VISUALS ---
+            const drawAbstractPattern = (type, x, y, w, h) => {
+                doc.saveGraphicsState();
+
+                if (type === "toc") {
+                    // Stunning Earth with detailed continents and orbital recycling symphony
+                    doc.setGState(new doc.GState({ opacity: 0.15 }));
+
+                    // Detailed Earth with atmospheric glow
+                    doc.setFillColor(colors.gradientStart);
+                    doc.circle(x + w * 0.5, y + h * 0.4, w * 0.22, "F");
+                    // Atmospheric glow
+                    doc.setGState(new doc.GState({ opacity: 0.08 }));
+                    doc.circle(x + w * 0.5, y + h * 0.4, w * 0.28, "F");
+                    doc.setGState(new doc.GState({ opacity: 0.18 }));
+
+                    // Detailed continents with texture
+                    doc.setFillColor(colors.gradientMid);
+                    // North America-like shape
+                    doc.ellipse(x + w * 0.42, y + h * 0.32, w * 0.08, w * 0.05, "F");
+                    doc.ellipse(x + w * 0.44, y + h * 0.35, w * 0.06, w * 0.04, "F");
+                    // Europe/Africa-like shape
+                    doc.ellipse(x + w * 0.52, y + h * 0.38, w * 0.05, w * 0.08, "F");
+                    doc.ellipse(x + w * 0.51, y + h * 0.42, w * 0.04, w * 0.06, "F");
+                    // Asia-like shape
+                    doc.ellipse(x + w * 0.56, y + h * 0.35, w * 0.07, w * 0.05, "F");
+
+                    // Beautiful orbital recycling symbols with motion trails
+                    doc.setGState(new doc.GState({ opacity: 0.2 }));
+                    for (let orbit = 0; orbit < 2; orbit++) {
+                        for (let i = 0; i < 8; i++) {
+                            const angle = (i / 8) * Math.PI * 2 + orbit * 0.3;
+                            const radius = w * (0.38 + orbit * 0.15);
+                            const symbolX = x + w * 0.5 + Math.cos(angle) * radius;
+                            const symbolY = y + h * 0.4 + Math.sin(angle) * radius * 0.7;
+
+                            // Recycling arrow segments
+                            doc.setFillColor(colors.light);
+                            doc.setGState(new doc.GState({ opacity: 0.15 }));
+                            // Draw recycling arrows as curved segments
+                            const arrowSize = w * 0.025;
+                            for (let seg = 0; seg < 3; seg++) {
+                                const segAngle = angle + (seg * Math.PI * 2) / 3;
+                                doc.triangle(
+                                    symbolX + Math.cos(segAngle) * arrowSize,
+                                    symbolY + Math.sin(segAngle) * arrowSize * 0.8,
+                                    symbolX + Math.cos(segAngle + 0.3) * arrowSize * 0.7,
+                                    symbolY + Math.sin(segAngle + 0.3) * arrowSize * 0.5,
+                                    symbolX + Math.cos(segAngle - 0.3) * arrowSize * 0.7,
+                                    symbolY + Math.sin(segAngle - 0.3) * arrowSize * 0.5,
+                                    "F"
+                                );
+                            }
+                        }
+                    }
+
+                    // Ocean waves with foam detail
+                    doc.setGState(new doc.GState({ opacity: 0.12 }));
+                    doc.setFillColor(colors.light);
+                    for (let wave = 0; wave < 3; wave++) {
+                        for (let i = 0; i < 6; i++) {
+                            doc.ellipse(
+                                x + w * (0.1 + i * 0.15),
+                                y + h * (0.72 + wave * 0.08),
+                                w * 0.12,
+                                h * (0.04 + wave * 0.01),
+                                "F"
+                            );
+                        }
+                    }
+                } else if (type === "nature") {
+                    // Forest and nature scene
+                    doc.setGState(new doc.GState({ opacity: 0.15 }));
+
+                    // Multiple trees
+                    for (let t = 0; t < 3; t++) {
+                        const treeX = x + w * (0.2 + t * 0.3);
+                        doc.setFillColor(t === 1 ? colors.gradientMid : colors.gradientStart);
+
+                        // Tree crown - layered triangles
+                        doc.triangle(
+                            treeX,
+                            y + h * 0.15,
+                            treeX - w * 0.12,
+                            y + h * 0.4,
+                            treeX + w * 0.12,
+                            y + h * 0.4,
+                            "F"
+                        );
+                        doc.triangle(
+                            treeX,
+                            y + h * 0.3,
+                            treeX - w * 0.1,
+                            y + h * 0.5,
+                            treeX + w * 0.1,
+                            y + h * 0.5,
+                            "F"
+                        );
+
+                        // Trunk
+                        doc.setFillColor(colors.gradientMid);
+                        doc.rect(treeX - w * 0.02, y + h * 0.5, w * 0.04, h * 0.2, "F");
+                    }
+
+                    // Grass/ground
+                    doc.setGState(new doc.GState({ opacity: 0.1 }));
+                    doc.setFillColor(colors.gradientStart);
+                    doc.rect(x, y + h * 0.7, w, h * 0.3, "F");
+
+                    // Flying birds
+                    doc.setGState(new doc.GState({ opacity: 0.2 }));
+                    doc.setDrawColor(colors.gradientMid);
+                    doc.setLineWidth(1);
+                    for (let b = 0; b < 4; b++) {
+                        const birdX = x + w * (0.3 + b * 0.15);
+                        const birdY = y + h * (0.1 + b * 0.05);
+                        // Simple bird V shape
+                        doc.line(birdX - w * 0.02, birdY, birdX, birdY - h * 0.02);
+                        doc.line(birdX, birdY - h * 0.02, birdX + w * 0.02, birdY);
+                    }
+
+                    // Sun
+                    doc.setFillColor(colors.light);
+                    doc.setGState(new doc.GState({ opacity: 0.2 }));
+                    doc.circle(x + w * 0.85, y + h * 0.15, w * 0.08, "F");
+                } else if (type === "business") {
+                    // Sustainable growth visualization
+                    doc.setGState(new doc.GState({ opacity: 0.12 }));
+
+                    // Plant growing from soil with leaves as bars
+                    const stemX = x + w * 0.15;
+                    doc.setFillColor(colors.gradientMid);
+                    doc.rect(stemX, y + h * 0.5, w * 0.02, h * 0.4, "F");
+
+                    // Leaves representing growth metrics
+                    const leaves = [
+                        { size: 0.4, angle: 45 },
+                        { size: 0.6, angle: -30 },
+                        { size: 0.8, angle: 60 },
+                        { size: 0.7, angle: -45 },
+                        { size: 0.9, angle: 30 }
+                    ];
+
+                    leaves.forEach((leaf, i) => {
+                        const leafY = y + h * (0.8 - i * 0.15);
+                        doc.setFillColor(i % 2 === 0 ? colors.gradientStart : colors.gradientMid);
+                        doc.ellipse(
+                            stemX + w * 0.08,
+                            leafY,
+                            w * 0.06 * leaf.size,
+                            w * 0.03 * leaf.size,
+                            "F"
+                        );
+                        doc.ellipse(
+                            stemX - w * 0.08,
+                            leafY + h * 0.03,
+                            w * 0.06 * leaf.size,
+                            w * 0.03 * leaf.size,
+                            "F"
+                        );
+                    });
+
+                    // Coins/value indicators
+                    doc.setFillColor(colors.light);
+                    doc.setGState(new doc.GState({ opacity: 0.15 }));
+                    for (let c = 0; c < 5; c++) {
+                        doc.circle(x + w * (0.5 + c * 0.08), y + h * (0.3 + c * 0.1), w * 0.03, "F");
+                    }
+
+                    // Upward arrow
+                    doc.setFillColor(colors.gradientStart);
+                    doc.setGState(new doc.GState({ opacity: 0.2 }));
+                    doc.triangle(
+                        x + w * 0.75,
+                        y + h * 0.2,
+                        x + w * 0.7,
+                        y + h * 0.35,
+                        x + w * 0.8,
+                        y + h * 0.35,
+                        "F"
+                    );
+                    doc.rect(x + w * 0.73, y + h * 0.35, w * 0.04, h * 0.4, "F");
+                } else if (type === "stations") {
+                    // Recycling stations network with environmental theme
+                    doc.setGState(new doc.GState({ opacity: 0.12 }));
+
+                    // Recycling bins/stations
+                    const stations = [
+                        [0.2, 0.3], [0.5, 0.2], [0.8, 0.35],
+                        [0.25, 0.65], [0.6, 0.7], [0.75, 0.8]
+                    ];
+
+                    // Connection lines (transport routes)
+                    doc.setDrawColor(colors.gradientStart);
+                    doc.setLineWidth(1.5);
+                    doc.setGState(new doc.GState({ opacity: 0.08 }));
+                    for (let i = 0; i < stations.length - 1; i++) {
+                        doc.line(
+                            x + w * stations[i][0], y + h * stations[i][1],
+                            x + w * stations[i + 1][0], y + h * stations[i + 1][1]
+                        );
+                    }
+
+                    // Draw recycling bins
+                    doc.setGState(new doc.GState({ opacity: 0.15 }));
+                    stations.forEach((pos, idx) => {
+                        doc.setFillColor(idx % 2 === 0 ? colors.gradientStart : colors.gradientMid);
+                        // Bin body
+                        doc.rect(x + w * pos[0] - 3, y + h * pos[1] - 3, 6, 8, "F");
+                        // Lid
+                        doc.rect(x + w * pos[0] - 4, y + h * pos[1] - 4, 8, 1, "F");
+
+                        // Recycling symbol
+                        doc.setDrawColor(colors.white);
+                        doc.setLineWidth(0.5);
+                        doc.circle(x + w * pos[0], y + h * pos[1], 2, "S");
+                    });
+
+                    // Central hub with leaves
+                    doc.setFillColor(colors.gradientStart);
+                    doc.setGState(new doc.GState({ opacity: 0.2 }));
+                    doc.circle(x + w * 0.5, y + h * 0.5, 10, "F");
+
+                    // Leaves radiating from center
+                    for (let l = 0; l < 6; l++) {
+                        const angle = (l / 6) * Math.PI * 2;
+                        doc.setFillColor(colors.gradientMid);
+                        doc.ellipse(
+                            x + w * 0.5 + Math.cos(angle) * 15,
+                            y + h * 0.5 + Math.sin(angle) * 15,
+                            4, 2, "F"
+                        );
+                    }
+                } else if (type === "sdg") {
+                    // UN SDG themed with environmental focus
+                    doc.setGState(new doc.GState({ opacity: 0.15 }));
+
+                    // Central sustainable development icon
+                    doc.setFillColor(colors.gradientStart);
+                    doc.circle(x + w * 0.5, y + h * 0.5, w * 0.15, "F");
+
+                    // 17 SDG goals represented as small circles
+                    const sdgColors = [colors.gradientStart, colors.gradientMid, colors.light];
+                    for (let ring = 0; ring < 2; ring++) {
+                        const numDots = ring === 0 ? 8 : 9;
+                        for (let i = 0; i < numDots; i++) {
+                            const angle = (i / numDots) * Math.PI * 2;
+                            const radius = w * (0.25 + ring * 0.15);
+                            doc.setFillColor(sdgColors[i % 3]);
+                            doc.circle(
+                                x + w * 0.5 + Math.cos(angle) * radius,
+                                y + h * 0.5 + Math.sin(angle) * radius * 0.8,
+                                w * 0.03,
+                                "F"
+                            );
+
+                            // Add small leaf to each
+                            doc.setFillColor(colors.light);
+                            doc.setGState(new doc.GState({ opacity: 0.1 }));
+                            doc.ellipse(
+                                x + w * 0.5 + Math.cos(angle) * radius,
+                                y + h * 0.5 + Math.sin(angle) * radius * 0.8,
+                                w * 0.015, w * 0.01, "F"
+                            );
+                            doc.setGState(new doc.GState({ opacity: 0.15 }));
+                        }
+                    }
+
+                    // Environmental symbols in corners
+                    doc.setGState(new doc.GState({ opacity: 0.1 }));
+                    doc.setFillColor(colors.gradientMid);
+                    // Water drop
+                    doc.circle(x + w * 0.15, y + h * 0.15, w * 0.04, "F");
+                    doc.triangle(x + w * 0.15, y + h * 0.1, x + w * 0.12, y + h * 0.15, x + w * 0.18, y + h * 0.15, "F");
+                    // Wind turbine
+                    doc.rect(x + w * 0.85, y + h * 0.85, w * 0.01, h * 0.1, "F");
+                }
+                doc.restoreGraphicsState();
+            };
+
+            // --- COVER PAGE (Portrait) ---
+            function drawGradientBackground() {
+                doc.setFillColor(colors.gradientEnd);
+                doc.rect(0, 0, width, height, 'F');
+                doc.setFillColor(colors.gradientMid);
+                doc.circle(0, 0, width * 1.2, 'F');
+                doc.setFillColor(colors.gradientStart);
+                doc.circle(0, 0, width * 0.6, 'F');
+            }
+            drawGradientBackground();
+
+            doc.setTextColor(colors.white);
+            doc.setFontSize(40);
+            doc.setFont('helvetica', 'bold');
+            doc.text('ESG Report', 20, height / 3);
+
+            const companyName = document.getElementById('searchInput').value || document.getElementById('searchInput2').value || 'Cycl';
+            doc.setFontSize(24);
+            doc.setFont('helvetica', 'normal');
+            doc.text(companyName, 20, (height / 3) + 15);
+
+            const year = new Date().getFullYear();
+            doc.setFontSize(60);
+            doc.setFont('helvetica', 'bold');
+            doc.text(String(year), 20, (height / 3) + 40);
+
+            doc.setDrawColor(colors.light);
+            doc.setLineWidth(1);
+            doc.line(20, (height / 3) + 50, width - 20, (height / 3) + 50);
+
+            const customPeriod = window.currentCustomPeriod;
+            const fromDate = new Date(customPeriod.fromMonth + '-01');
+            const toDate = new Date(customPeriod.toMonth + '-01');
+            const fromText = fromDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+            const toText = toDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+            doc.setFontSize(14);
+            doc.text(`Reporting Period: ${fromText} - ${toText}`, 20, (height / 3) + 65);
+
+            doc.setFillColor(colors.light);
+            doc.roundedRect(width - 80, height - 80, 60, 60, 5, 5, 'F');
+            doc.setTextColor(colors.gradientEnd);
+            doc.setFontSize(10);
+            doc.text("Cycl", width - 70, height - 50);
+
+
+            // --- COMMON HEADER/FOOTER for Landscape ---
+            function addHeader(title) {
+                doc.setFillColor(colors.gradientEnd);
+                doc.rect(0, 0, width, 25, 'F');
+                doc.setTextColor(colors.white);
+                doc.setFontSize(16);
+                doc.setFont('helvetica', 'bold');
+                doc.text(title, 15, 17);
+                doc.setFontSize(10);
+                doc.setFont('helvetica', 'normal');
+                doc.text(`${companyName} | ${year}`, width - 15, 17, { align: 'right' });
+            }
+
+            function addFooter(pageNumber) {
+                doc.setFillColor(colors.light);
+                doc.rect(0, height - 12, width, 12, 'F');
+                doc.setTextColor(colors.gradientEnd);
+                doc.setFontSize(8);
+                doc.text(`Page ${pageNumber}`, width / 2, height - 4, { align: 'center' });
+            }
+
+            let pageNum = 1;
+
+            // --- PAGE 2: TOC (Landscape) ---
+            doc.addPage('a4', 'l');
+            width = doc.internal.pageSize.getWidth();
+            height = doc.internal.pageSize.getHeight();
+            pageNum++;
+            const tocPageNum = pageNum;
+
+            drawAbstractPattern("toc", width * 0.6, 25, width * 0.4, height - 37);
+
+            // --- PAGE 3: EXECUTIVE SUMMARY (Landscape) ---
+            doc.addPage('a4', 'l');
+            pageNum++;
+            const execSummaryPageNum = pageNum;
+            addHeader('Executive Summary');
+
+            const col1X = 15;
+            const col1W = (width - 30) * 0.25;
+            const col2X = col1X + col1W + 10;
+            const col2W = (width - 30) * 0.35;
+            const col3X = col2X + col2W + 10;
+            const col3W = (width - 30) * 0.40 - 20;
+
+            // Col 1
+            doc.setTextColor(colors.textDark);
+            doc.setFontSize(14);
+            doc.setFont("helvetica", "bold");
+            doc.text("Overview", col1X, 40);
+
+            doc.setFontSize(10);
+            doc.setFont("helvetica", "normal");
+            doc.setTextColor(0, 0, 0);
+            const summaryText = `This report provides a comprehensive analysis of the environmental, social, and governance (ESG) performance for ${companyName}. The data reflects the commitment to sustainability and responsible business practices during the period of ${fromText} to ${toText}.`;
+            const splitSummary = doc.splitTextToSize(summaryText, col1W);
+            doc.text(splitSummary, col1X, 50);
+
+            const textHeight = doc.getTextDimensions(splitSummary).h;
+            drawAbstractPattern("nature", col1X, 50 + textHeight + 10, col1W, 60);
+
+            // Col 2
+            doc.setTextColor(colors.textDark);
+            doc.setFontSize(14);
+            doc.setFont("helvetica", "bold");
+            doc.text("Environmental Impact", col2X, 40);
+
+            const co2Kg = parseFloat(dashboardData.impact.co2Saved) || 0;
+            const plasticKg = parseFloat(dashboardData.impact.plasticDiverted) || 0;
+            const waterL = parseFloat(dashboardData.impact.waterSaved) || 0;
+            const energyKwh = parseFloat(dashboardData.impact.energySaved) || 0;
+
+            const metrics = [
+                { label: 'Bottles Recycled', value: dashboardData.totalBottles.toLocaleString(), unit: 'units' },
+                { label: 'CO2 Saved', value: co2Kg.toLocaleString(), unit: 'kg' },
+                { label: 'Water Saved', value: waterL.toLocaleString(), unit: 'L' },
+                { label: 'Energy Saved', value: energyKwh.toLocaleString(), unit: 'kWh' },
+                { label: 'Plastic Diverted', value: plasticKg.toLocaleString(), unit: 'kg' }
+            ];
+
+            let yPos = 50;
+            metrics.forEach((metric) => {
+                doc.setFillColor(colors.light);
+                doc.setDrawColor(colors.gradientMid);
+                doc.roundedRect(col2X, yPos, col2W, 20, 2, 2, 'FD');
+
+                doc.setTextColor(colors.gradientEnd);
+                doc.setFontSize(9);
+                doc.setFont('helvetica', 'bold');
+                doc.text(metric.label, col2X + 5, yPos + 8);
+
+                doc.setFontSize(12);
+                doc.text(`${metric.value} ${metric.unit}`, col2X + 5, yPos + 16);
+
+                yPos += 25;
+            });
+
+            // Col 3
+            doc.setTextColor(colors.textDark);
+            doc.setFontSize(14);
+            doc.setFont("helvetica", "bold");
+            doc.text("Business Impact", col3X, 40);
+
+            let totalBusinessValue = {};
+            if (window.dashboard && window.dashboard.calculateBusinessValue) {
+                totalBusinessValue = window.dashboard.calculateBusinessValue(dashboardData.totalBottles);
+            } else {
+                totalBusinessValue = {
+                    wasteManagementSavings: (dashboardData.totalBottles * 0.1).toFixed(0),
+                    materialValue: (dashboardData.totalBottles * 0.15).toFixed(0),
+                    carbonCreditValue: ((co2Kg / 1000) * 25).toFixed(2),
+                    roi: 33,
+                    esgScore: 16,
+                    communityImpact: 162,
+                    eprCompliance: plasticKg.toFixed(2)
+                };
+            }
+
+            const businessMetrics = [
+                { label: 'Cost Savings', value: '$' + (parseFloat(totalBusinessValue.wasteManagementSavings) + parseFloat(totalBusinessValue.materialValue)).toLocaleString() },
+                { label: 'Carbon Credit Value', value: '$' + totalBusinessValue.carbonCreditValue },
+                { label: 'ROI', value: totalBusinessValue.roi + '%' },
+                { label: 'ESG Score', value: totalBusinessValue.esgScore + '/100' }
+            ];
+
+            yPos = 50;
+            businessMetrics.forEach((metric) => {
+                doc.setFillColor(colors.white);
+                doc.setDrawColor(colors.gradientStart);
+                doc.roundedRect(col3X, yPos, col3W, 25, 2, 2, 'FD');
+
+                doc.setTextColor(colors.gradientEnd);
+                doc.setFontSize(9);
+                doc.setFont('helvetica', 'bold');
+                doc.text(metric.label, col3X + 5, yPos + 8);
+
+                doc.setFontSize(14);
+                doc.text(metric.value, col3X + 5, yPos + 20);
+
+                yPos += 30;
+            });
+
+            drawAbstractPattern("business", col3X, yPos + 5, col3W, 40);
+            addFooter(pageNum);
+
+            // --- PAGE 4: VISUAL ANALYTICS (Landscape) ---
+            doc.addPage('a4', 'l');
+            pageNum++;
+            const visualAnalyticsPageNum = pageNum;
+            addHeader('Visual Analytics');
+
+            const chartItems = [
+                { id: 'monthlyChart', title: 'Monthly Trends' },
+                { id: 'impactChart', title: 'Environmental Impact' },
+                { id: 'sdgChart', title: 'UN SDG Progress' },
+                { id: 'businessValueChart', title: 'Business Value Created' },
+            ];
+
+            const chartW = (width - 40) / 2;
+            const chartH = (height - 60) / 2;
+
+            chartItems.forEach((item, index) => {
+                const canvas = document.getElementById(item.id);
+                if (!canvas) return;
+
+                const col = index % 2;
+                const row = Math.floor(index / 2);
+                const x = 15 + col * (chartW + 10);
+                const y = 35 + row * (chartH + 5);
+
+                doc.setTextColor(colors.textDark);
+                doc.setFontSize(11);
+                doc.setFont('helvetica', 'bold');
+                doc.text(item.title, x, y);
+
+                try {
+                    const imgData = canvas.toDataURL('image/png', 1.0);
+                    let imgW = chartW;
+                    let imgH = (canvas.height / canvas.width) * imgW;
+                    if (imgH > chartH - 10) {
+                        const scale = (chartH - 10) / imgH;
+                        imgH = chartH - 10;
+                        imgW = imgW * scale;
+                    }
+                    doc.addImage(imgData, 'PNG', x, y + 5, imgW, imgH);
+                } catch (e) {
+                    doc.text('(Chart unavailable)', x, y + 10);
+                }
+            });
+            addFooter(pageNum);
+
+            // --- PAGE 5: DETAILED ANALYSIS & SDGs (Landscape) ---
+            doc.addPage('a4', 'l');
+            pageNum++;
+            const detailedAnalysisPageNum = pageNum;
+            addHeader('Detailed Analysis & SDGs');
+
+            // Layout: Left 30% Image, Right 70% List
+            const listX = (width * 0.3) + 20;
+            const listW = (width * 0.7) - 30;
+
+            drawAbstractPattern("nature", 15, 35, width * 0.3, height - 50);
+
+            yPos = 35;
+            doc.setTextColor(colors.textDark);
+            doc.setFontSize(14);
+            doc.text('UN Sustainable Development Goals', listX, yPos);
+            yPos += 15;
+
+            const sdgs = [
+                { name: 'SDG 6: Clean Water', value: `${(waterL * 0.95).toFixed(1)} L protected` },
+                { name: 'SDG 7: Clean Energy', value: `${energyKwh} kWh equivalent` },
+                { name: 'SDG 11: Sustainable Cities', value: `${plasticKg} kg diverted` },
+                { name: 'SDG 12: Responsible Consumption', value: `${dashboardData.totalBottles} units` },
+                { name: 'SDG 13: Climate Action', value: `${co2Kg} kg CO2 reduced` }
+            ];
+
+            sdgs.forEach((sdg, i) => {
+                doc.setFillColor(colors.light);
+                doc.rect(listX, yPos + (i * 25), listW, 20, 'F');
+
+                doc.setTextColor(colors.gradientEnd);
+                doc.setFontSize(11);
+                doc.setFont('helvetica', 'bold');
+                doc.text(sdg.name, listX + 5, yPos + (i * 25) + 13);
+
+                doc.setFont('helvetica', 'normal');
+                doc.text(sdg.value, listX + listW - 5, yPos + (i * 25) + 13, { align: 'right' });
+            });
+
+            addFooter(pageNum);
+
+            // --- PAGE 6: USAGE PATTERNS ANALYSIS (Landscape) ---
+            doc.addPage('a4', 'l');
+            pageNum++;
+            const usagePatternsPageNum = pageNum;
+            addHeader('Usage Patterns Analysis');
+
+            // 1. Calculate Peaks for Description
+            let peakHourText = "N/A";
+            let peakDayText = "N/A";
+
+            if (window.dashboard && window.dashboard.stations) {
+                const totalHourlyUsage = new Array(24).fill(0);
+                const totalDailyUsage = new Array(7).fill(0);
+
+                window.dashboard.stations.forEach(station => {
+                    if (station.usageByHour) {
+                        station.usageByHour.forEach((count, i) => totalHourlyUsage[i] += count);
+                    }
+                    if (station.usageByDay) {
+                        station.usageByDay.forEach((count, i) => totalDailyUsage[i] += count);
+                    }
+                });
+
+                // Find max hour
+                let maxHVal = -1;
+                let maxHIdx = -1;
+                totalHourlyUsage.forEach((val, i) => {
+                    if (val > maxHVal) {
+                        maxHVal = val;
+                        maxHIdx = i;
+                    }
+                });
+
+                if (maxHIdx !== -1) {
+                    const ampm = maxHIdx >= 12 ? "PM" : "AM";
+                    const hour = maxHIdx % 12 || 12;
+                    peakHourText = `${hour} ${ampm}`;
+                }
+
+                // Find max day
+                let maxDVal = -1;
+                let maxDIdx = -1;
+                totalDailyUsage.forEach((val, i) => {
+                    if (val > maxDVal) {
+                        maxDVal = val;
+                        maxDIdx = i;
+                    }
+                });
+
+                const daysFull = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+                if (maxDIdx !== -1) {
+                    peakDayText = daysFull[maxDIdx];
+                }
+            }
+
+            // Description of peaks
+            doc.setFontSize(12);
+            doc.setTextColor(colors.textDark);
+            doc.setFont("helvetica", "normal");
+            console.log("Adding Usage Patterns page. Peaks:", peakHourText, peakDayText);
+
+            // "stations had xx hours as most used"
+            const usageText = `Based on the analysis of user interactions, the stations had ${peakHourText} as the most used hour. Peak usage was observed on ${peakDayText}s.`;
+            doc.text(usageText, 15, 38);
+
+            // Add Charts
+            const usageChartItems = [
+                { id: 'hourlyUsageChart', chartKey: 'hourlyUsage', title: 'Hourly Activity Patterns' },
+                { id: 'dailyUsageChart', chartKey: 'dailyUsage', title: 'Daily Usage Trends' }
+            ];
+
+            const uChartW = (width - 40) / 2;
+            const uChartH = (height - 60);
+
+            usageChartItems.forEach((item, index) => {
+                const x = 15 + index * (uChartW + 10);
+                const y = 45;
+
+                doc.setTextColor(colors.textDark);
+                doc.setFontSize(11);
+                doc.setFont('helvetica', 'bold');
+                doc.text(item.title, x, y);
+
+                let imgData = null;
+
+                // Try getting image from Chart.js instance first (more reliable)
+                if (window.dashboard && window.dashboard.charts && window.dashboard.charts[item.chartKey]) {
+                    try {
+                        imgData = window.dashboard.charts[item.chartKey].toBase64Image();
+                    } catch (e) {
+                        console.warn(`Failed to get base64 image from chart ${item.chartKey}`, e);
+                    }
+                }
+
+                // Fallback to canvas
+                if (!imgData) {
+                    const canvas = document.getElementById(item.id);
+                    if (canvas) {
+                        try {
+                            imgData = canvas.toDataURL('image/png', 1.0);
+                        } catch (e) {
+                            console.warn(`Failed to get image from canvas ${item.id}`, e);
+                        }
+                    }
+                }
+
+                if (imgData) {
+                    try {
+                        // Calculate dimensions to maintain aspect ratio
+                        // We don't have aspect ratio from base64 easily without loading it, 
+                        // but usually it matches the canvas. 
+                        // We'll assume a standard aspect ratio or fit to box if unknown.
+                        let imgW = uChartW;
+                        let imgH = uChartW * 0.6; // Default aspect ratio assumption if needed
+
+                        // If we have canvas, use its aspect ratio
+                        const canvas = document.getElementById(item.id);
+                        if (canvas) {
+                            imgH = (canvas.height / canvas.width) * imgW;
+                        }
+
+                        // Limit height
+                        if (imgH > uChartH - 20) {
+                            const scale = (uChartH - 20) / imgH;
+                            imgH = uChartH - 20;
+                            imgW = imgW * scale;
+                        }
+                        doc.addImage(imgData, 'PNG', x, y + 5, imgW, imgH);
+                    } catch (e) {
+                        console.error("Error adding chart image to PDF", e);
+                        doc.text('(Error rendering chart)', x, y + 10);
+                    }
+                } else {
+                    doc.text('(Chart not available)', x, y + 10);
+                }
+            });
+
+            addFooter(pageNum);
+
+            // --- RENDER TOC CONTENT ---
+            doc.setPage(tocPageNum);
+            addHeader('Table of Contents');
+
+            const tocItems = [
+                { title: 'Executive Summary', page: execSummaryPageNum },
+                { title: 'Visual Analytics', page: visualAnalyticsPageNum },
+                { title: 'Detailed Analysis & SDGs', page: detailedAnalysisPageNum },
+                { title: 'Usage Patterns Analysis', page: usagePatternsPageNum }
+            ];
+
+            let tocY = 50;
+            tocItems.forEach(item => {
+                doc.setTextColor(colors.textDark);
+                doc.setFontSize(16);
+                doc.setFont('helvetica', 'bold');
+                doc.text(item.title, 20, tocY);
+
+                const titleWidth = doc.getTextWidth(item.title);
+                const pageNumWidth = doc.getTextWidth(String(item.page));
+                const dotStart = 20 + titleWidth + 5;
+                const dotEnd = (width * 0.6) - 20 - pageNumWidth - 5;
+
+                doc.setFont('helvetica', 'normal');
+                doc.setFontSize(12);
+                let currentX = dotStart;
+                while (currentX < dotEnd) {
+                    doc.text('.', currentX, tocY);
+                    currentX += 3;
+                }
+
+                doc.setFontSize(16);
+                doc.setFont('helvetica', 'bold');
+                doc.text(String(item.page), (width * 0.6) - 20, tocY, { align: 'right' });
+
+                tocY += 25;
+            });
+
+            addFooter(tocPageNum);
+
+            // Save
+            const filename = `cycl-esg-report-${customPeriod.fromMonth}-to-${customPeriod.toMonth}.pdf`;
+            doc.save(filename);
+
+            showDownloadSuccess(`ESG Report Generated!\nPeriod: ${fromText} to ${toText}`);
+        }
+
+        // Show download success notification
+        function showDownloadSuccess(message) {
+            const notification = document.createElement('div');
+            notification.innerHTML = `📁 ${message}`;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: rgba(46, 204, 113, 0.9);
+                color: white;
+                padding: 16px 24px;
+                border-radius: 12px;
+                font-weight: 500;
+                z-index: 10000;
+                backdrop-filter: blur(10px);
+                animation: slideIn 0.3s ease-out;
+                max-width: 400px;
+            `;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 4000);
+        }
+
+        // Update download info based on current period
+        function updateDownloadInfo() {
+            const downloadInfo = document.getElementById('downloadInfo');
+            if (!downloadInfo) return;
+
+            if (window.currentCustomPeriod) {
+                const customPeriod = window.currentCustomPeriod;
+                const fromDate = new Date(customPeriod.fromMonth + '-01');
+                const toDate = new Date(customPeriod.toMonth + '-01');
+                const fromText = fromDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+                const toText = toDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+
+                downloadInfo.innerHTML = `📅 Custom period data (${fromText} - ${toText}) will be downloaded`;
+                downloadInfo.style.color = 'rgba(46, 204, 113, 0.9)';
+            } else {
+                downloadInfo.innerHTML = 'Current period data will be downloaded';
+                downloadInfo.style.color = 'rgba(255, 255, 255, 0.7)';
+            }
+        }
+
+        // Simple header update function
+        function updateHeader(companyName) {
+            const locationElement = document.getElementById('locationName');
+            const headerTitle = document.getElementById('headerTitle');
+
+            if (locationElement && companyName) {
+                locationElement.textContent = companyName;
+            }
+
+            if (headerTitle && companyName) {
+                headerTitle.textContent = `ESG Impact Report - ${companyName}`;
+            }
+        }
+
+        // Enhanced search function to update header
+        if (typeof window.searchStations === 'undefined') {
+            window.searchStations = function () {
+                const searchInput = document.getElementById('searchInput') || document.getElementById('searchInput2');
+                const companyName = searchInput ? searchInput.value.trim() : '';
+
+                if (!companyName) {
+                    showNotification('Please enter a company name', 'warning');
+                    return;
+                }
+
+                // Update header immediately
+                updateHeader(companyName);
+
+                // Show dashboard elements
+                const header = document.getElementById('mainHeader');
+                const searchContainer = document.getElementById('searchContainer');
+                const periodSelector = document.getElementById('periodSelector');
+                const dashboardContent = document.getElementById('dashboardContent');
+                const welcomeScreen = document.getElementById('welcomeScreen');
+
+                if (header) header.classList.add('show');
+                if (searchContainer) searchContainer.style.display = 'block';
+                if (periodSelector) periodSelector.style.display = 'block';
+                if (dashboardContent) dashboardContent.classList.add('show');
+                if (welcomeScreen) welcomeScreen.style.display = 'none';
+
+                // Call dashboard search if available
+                if (window.dashboard && window.dashboard.searchStations) {
+                    window.dashboard.searchStations(companyName);
+                }
+            };
+        }
+
+        // Override the setCustomPeriod function to update download info
+        const originalSetCustomPeriod = setCustomPeriod;
+        setCustomPeriod = function (customPeriod) {
+            originalSetCustomPeriod(customPeriod);
+            updateDownloadInfo();
+        };
+    </script>
+</body>
+
+</html>
