@@ -1,796 +1,508 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-  <!-- Required meta tags -->
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta charset="utf-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cycl Terms and Conditions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3fb868;
+            --primary-dark: #2f9e55;
+            --primary-light: #6fdc92;
+            --surface-color: rgba(255, 255, 255, 0.92);
+            --background-color: #f8fbf8;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --divider-color: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 10px 24px rgb(15 23 42 / 0.08);
+            --shadow-lg: 0 24px 48px rgb(15 23 42 / 0.12);
+            --border-radius: 18px;
+        }
 
-  <!-- important meta tags for social media -->
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-  <!-- Primary Meta Tags -->
-  <title>Cycl - Find your station & recycle</title>
-  <meta name="title" content="TinMate - Find your mate & chat together">
-  <meta name="description" content="TinMate will help you to find your nearest mate. You can chat with them easily ">
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(63, 184, 104, 0.14), transparent 34%),
+                radial-gradient(circle at bottom right, rgba(111, 220, 146, 0.16), transparent 28%),
+                var(--background-color);
+            color: var(--text-primary);
+            line-height: 1.65;
+            min-height: 100vh;
+        }
 
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="">
+        .shell {
+            width: min(1120px, calc(100% - 32px));
+            margin: 0 auto;
+            padding: 32px 0 56px;
+        }
 
-  <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:url" content="">
-  <meta property="twitter:title" content="TinMate - Find your mate & chat together">
-  <meta property="twitter:description"
-    content="TinMate will help you to find your nearest mate. You can chat with them easily ">
-  <meta property="twitter:image" content="images/tinmate.png">
+        .hero {
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            border-radius: 28px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(248, 252, 249, 0.96));
+            box-shadow: var(--shadow-lg);
+            padding: 40px;
+            margin-bottom: 24px;
+        }
 
-  <!-- stylesheet link -->
-  <link rel="stylesheet" href="css/styles.css">
+        .hero::after {
+            content: "";
+            position: absolute;
+            inset: auto -120px -140px auto;
+            width: 320px;
+            height: 320px;
+            background: radial-gradient(circle, rgba(63, 184, 104, 0.18), transparent 65%);
+            pointer-events: none;
+        }
 
-  <!-- bootstrap link -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(63, 184, 104, 0.12);
+            color: var(--primary-dark);
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            margin-bottom: 18px;
+        }
 
-  <!-- google fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Montserrat|Pacifico|Spartan" rel="stylesheet">
+        h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            line-height: 1.05;
+            letter-spacing: -0.04em;
+            margin-bottom: 12px;
+        }
 
-  <!-- favicon link -->
-  <link rel="shortcut icon" href="imagesweb/32.png" type="image/x-icon">
-  <link rel="icon" href="imagesweb/32.png" type="image/x-icon">
-  <!-- page title -->
-  <title>Cycl</title>
+        .hero p {
+            max-width: 760px;
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+        }
 
+        .meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .meta-chip {
+            padding: 10px 14px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.75);
+            border: 1px solid var(--divider-color);
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: minmax(0, 280px) minmax(0, 1fr);
+            gap: 24px;
+            align-items: start;
+        }
+
+        .toc,
+        .content {
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            background: var(--surface-color);
+            backdrop-filter: blur(12px);
+            border-radius: 24px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .toc {
+            position: sticky;
+            top: 24px;
+            padding: 24px;
+        }
+
+        .toc h2 {
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        .toc a {
+            display: block;
+            text-decoration: none;
+            color: var(--text-primary);
+            padding: 10px 12px;
+            border-radius: 12px;
+            transition: background 0.2s ease, color 0.2s ease;
+            font-size: 0.96rem;
+        }
+
+        .toc a:hover {
+            background: rgba(63, 184, 104, 0.08);
+            color: var(--primary-dark);
+        }
+
+        .content {
+            padding: 32px;
+        }
+
+        section+section {
+            margin-top: 32px;
+            padding-top: 32px;
+            border-top: 1px solid var(--divider-color);
+        }
+
+        h2 {
+            font-size: 1.45rem;
+            letter-spacing: -0.03em;
+            margin-bottom: 14px;
+        }
+
+        h3 {
+            font-size: 1.05rem;
+            margin: 18px 0 10px;
+        }
+
+        p+p,
+        p+ul,
+        ul+p,
+        ul+ul {
+            margin-top: 12px;
+        }
+
+        ul {
+            padding-left: 20px;
+            color: var(--text-primary);
+        }
+
+        li+li {
+            margin-top: 8px;
+        }
+
+        .notice {
+            margin-top: 18px;
+            padding: 16px 18px;
+            border-radius: 16px;
+            background: rgba(63, 184, 104, 0.08);
+            border: 1px solid rgba(63, 184, 104, 0.18);
+        }
+
+        .footer-nav {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            margin-top: 28px;
+            padding-top: 24px;
+            border-top: 1px solid var(--divider-color);
+        }
+
+        .footer-nav a {
+            text-decoration: none;
+            color: var(--primary-dark);
+            font-weight: 600;
+        }
+
+        @media (max-width: 920px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .toc {
+                position: static;
+            }
+
+            .hero,
+            .content,
+            .toc {
+                padding: 24px;
+            }
+
+            .shell {
+                width: min(100% - 20px, 1120px);
+                padding-top: 20px;
+            }
+        }
+    </style>
 </head>
 
 <body>
-
-  <section id="hero">
-    <div class="container">
-      <!-- Nav Bar -->
-      <nav class="navbar navbar-expand-lg navbar-dark navbar-toggleable-md">
-        <a class="navbar-brand logo" href="index.html">Cycl</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarItems"
-          aria-controls="navbarItems" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarItems">
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-items text-center">
-              <a class="nav-link" href="index.html">HOME</a>
-            </li>
-            <li class="nav-items text-center">
-              <a class="nav-link" href="aboutUs.html">ABOUT US</a>
-            </li>
-            <li class="nav-items text-center">
-              <a class="nav-link" href="faqweb.html">FAQ</a>
-            </li>
-            <li class="nav-items text-center">
-              <a class="nav-link" href="mailto:contact.cycl@gmail.com">CONTACT</a>
-            </li>
-          </ul>
-        </div>
-      </nav>
-      <!-- Title -->
-      <div class="row hero-row">
-        <div class="col-lg-6">
-          <div class="hero-description">
-            <h1 class="font-weight-bold hero-title">Terms & Conditions</h1>
-            <div class="terms-card">
-              <p>
-                By downloading or using the app, these terms will
-                automatically apply to you – you should make sure therefore
-                that you read them carefully before using the app. You’re not
-                allowed to copy or modify the app, any part of the app, or
-                our trademarks in any way. You’re not allowed to attempt to
-                extract the source code of the app, and you also shouldn’t try
-                to translate the app into other languages or make derivative
-                versions. The app itself, and all the trademarks, copyright,
-                database rights, and other intellectual property rights related
-                to it, still belong to Cycl.
-              </p>
-              <p>
-                Cycl is committed to ensuring that the app is
-                as useful and efficient as possible. For that reason, we
-                reserve the right to make changes to the app or to charge for
-                its services, at any time and for any reason. We will never
-                charge you for the app or its services without making it very
-                clear to you exactly what you’re paying for.
-              </p>
-
-              <p><strong>Service Fee (Servicegebyr)</strong></p>
-              <p>
-                By using Cycl for deposit-based recycling (pant) of bottles and cans, you accept that Cycl charges a
-                service fee (servicegebyr) equal to <strong>50%</strong> of the deposit value for the bottles and cans
-                registered through Cycl. The remaining amount (50%) will be credited to you according to the in-app
-                redemption flow. If the deposit value changes due to external rules, the calculated fee will change
-                accordingly.
-              </p>
-              <p>
-                The Cycl app stores and processes personal data that
-                you have provided to us, to provide our
-                Service. It’s your responsibility to keep your phone and
-                access to the app secure. We therefore recommend that you do
-                not jailbreak or root your phone, which is the process of
-                removing software restrictions and limitations imposed by the
-                official operating system of your device. It could make your
-                phone vulnerable to malware/viruses/malicious programs,
-                compromise your phone’s security features and it could mean
-                that the Cycl app won’t work properly or at all.
-              </p>
-              <div>
-                <p>
-                  The app does use third-party services that declare their
-                  Terms and Conditions.
-                </p>
-                <p>
-                  Link to Terms and Conditions of third-party service
-                  providers used by the app
-                </p>
-                <ul>
-                  <li><a href="https://policies.google.com/terms" target="_blank" rel="noopener noreferrer">Google Play
-                      Services</a></li><!---->
-                  <li><a href="https://firebase.google.com/terms/analytics" target="_blank"
-                      rel="noopener noreferrer">Google Analytics for Firebase</a></li>
-                  <!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!---->
-                  <li><a href="https://expo.io/terms" target="_blank" rel="noopener noreferrer">Expo</a></li>
-                  <!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!---->
-                </ul>
-              </div>
-              <p>
-                You should be aware that there are certain things that
-                Cycl will not take responsibility for. Certain
-                functions of the app will require the app to have an active
-                internet connection. The connection can be Wi-Fi or provided
-                by your mobile network provider, but Cycl
-                cannot take responsibility for the app not working at full
-                functionality if you don’t have access to Wi-Fi, and you don’t
-                have any of your data allowance left.
-              </p>
-              <p></p>
-              <p>
-                If you’re using the app outside of an area with Wi-Fi, you
-                should remember that the terms of the agreement with your
-                mobile network provider will still apply. As a result, you may
-                be charged by your mobile provider for the cost of data for
-                the duration of the connection while accessing the app, or
-                other third-party charges. In using the app, you’re accepting
-                responsibility for any such charges, including roaming data
-                charges if you use the app outside of your home territory
-                (i.e. region or country) without turning off data roaming. If
-                you are not the bill payer for the device on which you’re
-                using the app, please be aware that we assume that you have
-                received permission from the bill payer for using the app.
-              </p>
-              <p>
-                Along the same lines, Cycl cannot always take
-                responsibility for the way you use the app i.e. You need to
-                make sure that your device stays charged – if it runs out of
-                battery and you can’t turn it on to avail the Service,
-                Cycl cannot accept responsibility.
-              </p>
-              <p>
-                With respect to Cycl’s responsibility for your
-                use of the app, when you’re using the app, it’s important to
-                bear in mind that although we endeavor to ensure that it is
-                updated and correct at all times, we do rely on third parties
-                to provide information to us so that we can make it available
-                to you. Cycl accepts no liability for any
-                loss, direct or indirect, you experience as a result of
-                relying wholly on this functionality of the app.
-              </p>
-              <p>
-                At some point, we may wish to update the app. The app is
-                currently available on iOS – the requirements for the
-                system(and for any additional systems we
-                decide to extend the availability of the app to) may change,
-                and you’ll need to download the updates if you want to keep
-                using the app. Cycl does not promise that it
-                will always update the app so that it is relevant to you
-                and/or works with the iOS version that you have
-                installed on your device. However, you promise to always
-                accept updates to the application when offered to you, We may
-                also wish to stop providing the app, and may terminate use of
-                it at any time without giving notice of termination to you.
-                Unless we tell you otherwise, upon any termination, (a) the
-                rights and licenses granted to you in these terms will end;
-                (b) you must stop using the app, and (if needed) delete it
-                from your device.
-              </p>
-              <p><strong>Changes to This Terms and Conditions</strong></p>
-              <p>
-                We may update our Terms and Conditions
-                from time to time. Thus, you are advised to review this page
-                periodically for any changes. We will
-                notify you of any changes by posting the new Terms and
-                Conditions on this page.
-              </p>
-              <p>
-                These terms and conditions are effective as of 2021-12-05
-              </p>
-              <p><strong>Contact Us</strong></p>
-              <p>
-                If you have any questions or suggestions about our
-                Terms and Conditions, do not hesitate to contact us
-                at contact.cycl@gmail.com.
-              </p>
-              <p>This Terms and Conditions page was generated by <a
-                  href="https://app-privacy-policy-generator.nisrulz.com/" target="_blank" rel="noopener noreferrer">App
-                  Privacy Policy Generator</a></p>
-
+    <div class="shell">
+        <header class="hero">
+            <div class="badge">Cycl Legal</div>
+            <h1>Terms and Conditions</h1>
+            <p>
+                These Terms and Conditions govern access to and use of the Cycl mobile application,
+                related websites, and connected services used for recycling verification, station discovery,
+                rewards, wallet functions, notifications, and payout features.
+            </p>
+            <div class="meta">
+                <div class="meta-chip">Effective date: 6 April 2026</div>
+                <div class="meta-chip">Applies to app and related web services</div>
             </div>
+        </header>
 
+        <div class="grid">
+            <aside class="toc">
+                <h2>Contents</h2>
+                <a href="#acceptance">1. Acceptance of Terms</a>
+                <a href="#service">2. Cycl Service</a>
+                <a href="#accounts">3. Accounts and Eligibility</a>
+                <a href="#recycling">4. Recycling Verification</a>
+                <a href="#wallet">5. Wallet, Rewards and Payouts</a>
+                <a href="#location">6. Stations and Location Features</a>
+                <a href="#conduct">7. Acceptable Use</a>
+                <a href="#availability">8. Availability and Changes</a>
+                <a href="#thirdparty">9. Third-Party Services</a>
+                <a href="#ip">10. Intellectual Property</a>
+                <a href="#liability">11. Disclaimers and Liability</a>
+                <a href="#termination">12. Suspension and Termination</a>
+                <a href="#changes">13. Changes to These Terms</a>
+                <a href="#contact">14. Contact</a>
+            </aside>
 
-          </div>
+            <main class="content">
+                <section id="acceptance">
+                    <h2>1. Acceptance of Terms</h2>
+                    <p>
+                        By accessing or using Cycl, you agree to be bound by these Terms and Conditions.
+                        If you do not agree, do not use the app or related services.
+                    </p>
+                    <p>
+                        These Terms apply to the Cycl application, any connected websites, hosted dashboards,
+                        and backend services used to provide account management, recycling verification,
+                        wallet functions, rewards, support, notifications, and payout processing.
+                    </p>
+                </section>
+
+                <section id="service">
+                    <h2>2. Cycl Service</h2>
+                    <p>
+                        Cycl is a recycling and rewards platform. Based on the current product, Cycl may allow users to:
+                    </p>
+                    <ul>
+                        <li>Create an account and maintain a personal profile.</li>
+                        <li>Find nearby recycling stations using map and location features.</li>
+                        <li>Use the device camera and machine-learning based detection flow to verify recycling actions.
+                        </li>
+                        <li>Earn Cycl Coins or similar in-app rewards connected to verified activity.</li>
+                        <li>View balances, transaction history, achievements, streaks, and insights.</li>
+                        <li>Send in-app balances to other users where that feature is enabled.</li>
+                        <li>Request payouts or connect payment methods where supported.</li>
+                        <li>Receive service and transaction-related notifications.</li>
+                    </ul>
+                    <div class="notice">
+                        Some features are country-specific, station-specific, device-specific, or subject to rollout,
+                        verification, or operational approval.
+                    </div>
+                </section>
+
+                <section id="accounts">
+                    <h2>3. Accounts and Eligibility</h2>
+                    <p>
+                        You are responsible for ensuring that your registration information is accurate, current,
+                        and complete. You are responsible for activity that occurs under your account unless caused by
+                        our fault.
+                    </p>
+                    <p>
+                        You must not impersonate another person, create fraudulent accounts, or use the service in a way
+                        that interferes with other users, stations, administrators, or service providers.
+                    </p>
+                    <p>
+                        If Cycl offers age-restricted or region-restricted features, you may only use those features if
+                        legally permitted.
+                    </p>
+                </section>
+
+                <section id="recycling">
+                    <h2>4. Recycling Verification</h2>
+                    <p>
+                        Cycl currently uses camera input and AI-assisted detection to guide and verify parts of the
+                        recycling process.
+                        This may include scanning labels, positioning an item, and confirming release into a station.
+                    </p>
+                    <h3>Verification rules</h3>
+                    <ul>
+                        <li>You must only scan and recycle eligible items in the correct station type.</li>
+                        <li>You must not attempt to manipulate the scan flow, camera view, captured images, or station
+                            process.</li>
+                        <li>Cycl may reject, reverse, review, or delay credits where activity appears invalid, mistaken,
+                            duplicated, or fraudulent.</li>
+                        <li>Station capacity, configuration, country restrictions, and item-label requirements may
+                            affect whether a recycle is accepted.</li>
+                    </ul>
+                    <p>
+                        Cycl does not guarantee that every scan attempt or recycling event will be recognized.
+                        Environmental conditions, device limitations, connectivity, camera quality, and model accuracy
+                        may affect performance.
+                    </p>
+                </section>
+
+                <section id="wallet">
+                    <h2>5. Wallet, Rewards and Payouts</h2>
+                    <p>
+                        Cycl may maintain an in-app balance or reward ledger for eligible users. Balances, rewards,
+                        transfers, and payout options may be subject to station validation, anti-fraud review,
+                        identity or account verification, country rules, transaction limits, and third-party payment
+                        provider rules.
+                    </p>
+                    <h3>Important conditions</h3>
+                    <ul>
+                        <li>In-app balances are not a bank deposit, savings account, or guaranteed stored-value product.
+                        </li>
+                        <li>Cash-out or payout functionality is only available where Cycl enables it and where supported
+                            by the relevant provider.</li>
+                        <li>Payout times, fees, reversals, holds, eligibility checks, and compliance reviews may depend
+                            on external payment rails.</li>
+                        <li>Cycl may suspend, reverse, or investigate transactions connected to abuse, error, legal
+                            risk, or suspicious activity.</li>
+                    </ul>
+                    <p>
+                        If you connect a payment method or request a payout, you are responsible for ensuring the
+                        payment details you provide are accurate and that you are authorized to use them.
+                    </p>
+                </section>
+
+                <section id="location">
+                    <h2>6. Stations and Location Features</h2>
+                    <p>
+                        Cycl may use location features to help you discover nearby stations, improve station relevance,
+                        and support certain operations such as transaction or payout context where enabled.
+                    </p>
+                    <p>
+                        Station listings, capacity, availability, distance, and supported item types may change at any
+                        time.
+                        A station shown in the app is not a guarantee that the station is operational, accessible,
+                        empty, or suitable for your item at that moment.
+                    </p>
+                </section>
+
+                <section id="conduct">
+                    <h2>7. Acceptable Use</h2>
+                    <p>You may not:</p>
+                    <ul>
+                        <li>Attempt to gain rewards or payouts through false scans, replayed images, scripted activity,
+                            or station misuse.</li>
+                        <li>Interfere with app security, rate limits, integrity checks, backend services, or
+                            administrator tooling.</li>
+                        <li>Use another person’s account, payment details, device permissions, or personal information
+                            without authority.</li>
+                        <li>Upload or transmit malicious code, attempt reverse engineering beyond what applicable law
+                            permits, or misuse APIs.</li>
+                        <li>Use Cycl in a way that breaches law, third-party terms, or another person’s rights.</li>
+                    </ul>
+                </section>
+
+                <section id="availability">
+                    <h2>8. Availability and Changes</h2>
+                    <p>
+                        Cycl may add, remove, suspend, or modify features, station logic, reward rules, supported payout
+                        methods,
+                        regional availability, translations, or AI models at any time.
+                    </p>
+                    <p>
+                        We do not guarantee uninterrupted or error-free operation. Service interruptions may occur due
+                        to maintenance,
+                        updates, third-party outages, mobile platform restrictions, payment-provider review, or security
+                        incidents.
+                    </p>
+                </section>
+
+                <section id="thirdparty">
+                    <h2>9. Third-Party Services</h2>
+                    <p>
+                        Cycl relies on third-party infrastructure and integrations, including cloud services,
+                        authentication,
+                        notifications, analytics, mapping, and payment or payout services. Based on the current
+                        implementation,
+                        this may include Firebase, Google, Mapbox, Stripe, PayPal, Wise, Apple sign-in, Facebook login,
+                        and related providers.
+                    </p>
+                    <p>
+                        Use of third-party functionality may also be subject to those providers’ own terms, policies,
+                        uptime, risk controls, and eligibility criteria.
+                    </p>
+                </section>
+
+                <section id="ip">
+                    <h2>10. Intellectual Property</h2>
+                    <p>
+                        Cycl, including its software, design, branding, AI workflows, text, graphics, interfaces,
+                        and service logic, is protected by intellectual property laws. Except for the limited right to
+                        use Cycl
+                        in accordance with these Terms, no rights are granted to you.
+                    </p>
+                </section>
+
+                <section id="liability">
+                    <h2>11. Disclaimers and Liability</h2>
+                    <p>
+                        To the maximum extent permitted by law, Cycl is provided on an “as is” and “as available” basis.
+                        Cycl disclaims implied warranties except where they cannot legally be excluded.
+                    </p>
+                    <p>
+                        To the maximum extent permitted by law, Cycl is not liable for indirect, incidental, special,
+                        consequential, or punitive damages, or for loss of profits, data, goodwill, rewards, balances,
+                        or opportunities,
+                        arising from or related to use of the service.
+                    </p>
+                    <p>
+                        Nothing in these Terms excludes liability that cannot lawfully be excluded, including mandatory
+                        consumer rights.
+                    </p>
+                </section>
+
+                <section id="termination">
+                    <h2>12. Suspension and Termination</h2>
+                    <p>
+                        Cycl may suspend, restrict, review, or terminate access to all or part of the service if we
+                        reasonably believe that:
+                    </p>
+                    <ul>
+                        <li>these Terms have been breached;</li>
+                        <li>fraudulent, abusive, or unlawful activity has occurred;</li>
+                        <li>verification, station integrity, or payout systems are at risk; or</li>
+                        <li>continued access would create security, compliance, or operational harm.</li>
+                    </ul>
+                </section>
+
+                <section id="changes">
+                    <h2>13. Changes to These Terms</h2>
+                    <p>
+                        Cycl may update these Terms from time to time. Updated Terms become effective when posted,
+                        unless a later date is stated. Continued use of the service after an update means you accept the
+                        revised Terms.
+                    </p>
+                </section>
+
+                <section id="contact">
+                    <h2>14. Contact</h2>
+                    <p>
+                        For legal or support questions relating to these Terms, please contact Cycl through the support
+                        or contact channels
+                        made available in the app or on the relevant Cycl website.
+                    </p>
+                    <div class="footer-nav">
+                        <span>Need the privacy details too?</span>
+                        <a href="privacy.html">Open Privacy Policy</a>
+                    </div>
+                </section>
+            </main>
         </div>
-
-        <div class="col-lg-6">
-          <img class="hero-img" src="imagesweb/greenbtl.png" alt="Our Application" style="height: 440px; width: 450px;">
-        </div>
-      </div>
     </div>
-
-  </section>
-
-
-
-  <!-- Footer -->
-
-  <footer id="footer">
-    <div class="meet-the-dev">
-      <a class="social-buttons" href="https://www.linkedin.com/company/77729926/admin/" target="_blank">
-        <button class="btn btn-light text-primary btn-sm" type="button"><i><img
-              src="https://img.icons8.com/material-outlined/24/000000/linkedin--v1.png" /></i> Linkedin</button>
-      </a>
-      <a class="social-buttons" href="https://www.instagram.com/cycl.app/" target="_blank">
-        <button class="btn btn-light text-primary btn-sm" type="button"><i></i><img
-            src="https://img.icons8.com/material-outlined/24/000000/instagram-new--v1.png" /></i> Instagram</button>
-      </a>
-
-      <!-- 
-      <a class="social-buttons" href="mailto:a.alnahian2003@gmail.com" mail target="_blank">
-        <button class="btn btn-danger btn-sm" type="button"><i class="fas fa-envelope-square"></i></i> Linkedin</button>
-      </a>
-
-      -->
-    </div>
-    <p class="copyright-text">©Copyright 2020 Cycl</p>
-  </footer>
-
-
-  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-    crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-    crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-    crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-
-
-  <!-- fontawesome kit -->
-  <script src="https://kit.fontawesome.com/b286598102.js" crossorigin="anonymous"></script>
 </body>
-
-<style>
-  :root {
-    --cycl-green: #52b459;
-    --cycl-green-dark: #3a9a45;
-    --cycl-bg: #f4fbf5;
-    --cycl-text: #1b1f23;
-    --cycl-muted: rgba(27, 31, 35, 0.72);
-  }
-
-  /* browser default styling */
-  html {
-    scroll-behavior: smooth;
-  }
-
-  /* customized scrollbar for chrome desktop version only */
-  /* width */
-  ::-webkit-scrollbar {
-    width: 10px;
-  }
-
-  /* Track */
-  ::-webkit-scrollbar-track {
-    background: none;
-  }
-
-  /* Handle */
-  ::-webkit-scrollbar-thumb:hover {
-    background: #0b5fdd;
-    /* Old browsers */
-    background: -moz-linear-gradient(-45deg, #0b5fdd 1%, #3690f0 60%, #54a3ee 79%, #4ca3ef 100%);
-    /* FF3.6-15 */
-    background: -webkit-linear-gradient(-45deg, #0b5fdd 1%, #3690f0 60%, #54a3ee 79%, #4ca3ef 100%);
-    /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(135deg, #0b5fdd 1%, #3690f0 60%, #54a3ee 79%, #4ca3ef 100%);
-    /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0b5fdd', endColorstr='#4ca3ef', GradientType=1);
-    /* IE6-9 fallback on horizontal gradient */
-    border: 1px solid #fff;
-  }
-
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb {
-    background: #555;
-  }
-
-  /* body styling */
-  body {
-    font-family: "Montserrat" !important;
-    background: var(--cycl-bg);
-    color: var(--cycl-text);
-    -webkit-user-select: none;
-    -webkit-touch-callout: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    overflow-x: hidden;
-  }
-
-  img {
-    pointer-events: none;
-  }
-
-  a,
-  a:hover,
-  a:visited,
-  a:focus {
-    text-decoration: none !important;
-  }
-
-  /* hero section styling */
-  #hero {
-    color: var(--cycl-text);
-    background: linear-gradient(135deg, rgba(82, 180, 89, 0.18) 0%, rgba(82, 180, 89, 0.05) 100%);
-
-    /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0b5fdd', endColorstr='#4ca3ef', GradientType=1);
-    /* IE6-9 fallback on horizontal gradient */
-    box-shadow: none;
-  }
-
-
-  /* navbar styling */
-  .navbar {
-    background: rgba(82, 180, 89, 0.92);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-radius: 16px;
-    padding: 12px 16px;
-    box-shadow: 0 10px 25px rgba(16, 24, 40, 0.12);
-    margin-top: 16px;
-  }
-
-  /* logo/brandname styling */
-  .navbar-brand {
-    font-family: "Montserrat" !important;
-    font-size: 1.6em !important;
-    font-weight: 800 !important;
-    letter-spacing: 0.2px;
-  }
-
-  .nav-items {
-    padding: 0 5px;
-  }
-
-  .nav-link {
-    color: rgba(255, 255, 255, 0.92) !important;
-    font-weight: 600;
-  }
-
-  .nav-link:hover {
-    color: rgb(255, 255, 255) !important;
-  }
-
-  /* hero row styling */
-  .hero-row {
-    margin-top: 32px;
-    padding-bottom: 64px;
-  }
-
-  /* hero description styling */
-  .hero-description {
-    margin-top: 24px;
-    margin-left: 0;
-  }
-
-  .terms-card {
-    background: rgba(255, 255, 255, 0.92);
-    border: 1px solid rgba(82, 180, 89, 0.18);
-    border-radius: 18px;
-    padding: 22px 22px;
-    box-shadow: 0 18px 40px rgba(16, 24, 40, 0.10);
-    color: var(--cycl-text);
-  }
-
-  .terms-card p {
-    color: var(--cycl-muted);
-    line-height: 1.75;
-    margin-bottom: 14px;
-  }
-
-  .terms-card strong {
-    color: var(--cycl-text);
-  }
-
-  .terms-card a {
-    color: var(--cycl-green-dark);
-    font-weight: 700;
-  }
-
-  /* hero button styling */
-  .get-started-button,
-  .join-community-button {
-    margin-right: 5px;
-  }
-
-  /* hero image styling */
-  .hero-img {
-    margin-top: -10%;
-    padding-bottom: 10%;
-    margin-left: 40%;
-    transform: rotate(20deg);
-  }
-
-  /* hero title styling */
-  .hero-title {
-    color: var(--cycl-text);
-    font-family: "Montserrat";
-    text-shadow: none;
-    line-height: 1.2;
-    margin-bottom: 16px;
-  }
-
-  /* features section styling */
-  #features {
-    padding: 8% 20%;
-  }
-
-  .features-box {
-    text-align: center;
-  }
-
-  h3 {
-    font-family: "Montserrat" !important;
-    font-weight: 700 !important;
-  }
-
-  .features-icons {
-    font-size: 55px;
-    background: -webkit-linear-gradient(-45deg, #0b5fdd 1%, #3690f0 80%, #54a3ee 79%, #4ca3ef 100%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 10px;
-  }
-
-  .features-icons:hover {
-    transform: scale(1.3);
-    transition: 0.3s;
-  }
-
-
-  /* testimonial section styling */
-  #testimonials {
-    padding: 10% 10%;
-    text-align: center;
-    background-color: #0b5fdd;
-    color: #fff;
-    text-shadow: 1px 2px 8px rgba(0, 0, 0, .3);
-    margin-bottom: 5%;
-    box-shadow: 0px 5px 20px rgba(50, 50, 50, .5);
-  }
-
-  #testimonials h2 {
-    font-weight: 700 !important;
-    margin-bottom: 3%;
-  }
-
-  .quotation-symbol {
-    padding: 0 2%;
-    font-family: "Spartan";
-  }
-
-  #testimonials img {
-    border-radius: 50%;
-  }
-
-  #testimonials p {
-    margin-top: 5px;
-    margin-bottom: -5px;
-  }
-
-  .carousel-inner {
-    margin-top: 5%;
-    height: 350px;
-  }
-
-  em {
-    font-size: 16px;
-    margin-bottom: 10%;
-  }
-
-  /* press section styling */
-  #press {
-    text-align: center;
-    margin-bottom: 5%;
-    padding-top: 4%;
-    padding-bottom: 4%;
-  }
-
-  .press-image {
-    width: 15%;
-    padding: 0 2% 0 2%;
-  }
-
-  /* pricing section styling */
-  #pricing {
-    /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#0b5fdd+1,3690f0+60,54a3ee+79,4ca3ef+100 */
-    background: #0b5fdd;
-    /* Old browsers */
-    background: -moz-linear-gradient(-45deg, #0b5fdd 1%, #3690f0 60%, #54a3ee 79%, #4ca3ef 100%);
-    /* FF3.6-15 */
-    background: -webkit-linear-gradient(-45deg, #0b5fdd 1%, #3690f0 60%, #54a3ee 79%, #4ca3ef 100%);
-    /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(135deg, #0b5fdd 1%, #3690f0 60%, #54a3ee 79%, #4ca3ef 100%);
-    /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0b5fdd', endColorstr='#4ca3ef', GradientType=1);
-    /* IE6-9 fallback on horizontal gradient */
-    box-shadow: 0px 5px 20px rgba(50, 50, 50, .5);
-    text-align: center;
-    padding: 10% 15%;
-    font-family: "Montserrat";
-  }
-
-  .pricing-heading {
-    color: #fff;
-    margin-bottom: 10%;
-    text-shadow: 1px 2px 8px rgba(0, 0, 0, .3);
-  }
-
-  .pricing-heading h2 {
-    font-weight: 700 !important;
-    text-shadow: 1px 2px 8px rgba(0, 0, 0, .3);
-  }
-
-  .card-header {
-    font-weight: 700 !important;
-  }
-
-  .pricing-section-icon {
-    background: -webkit-linear-gradient(-45deg, #0b5fdd 1%, #3690f0 80%, #54a3ee 79%, #4ca3ef 100%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  .rotated-icon {
-    transform: rotate(-45deg);
-  }
-
-  .price {
-    font-weight: 700 !important;
-    color: #3690f0;
-  }
-
-  h4 {
-    font-weight: 700 !important;
-  }
-
-  /* call to action section styling */
-  #cta {
-    text-align: center;
-    padding: 10% 10%;
-    font-family: "Montserrat"
-  }
-
-  #cta p {
-    margin-bottom: 3%;
-  }
-
-  /* footer section styling */
-  #footer {
-    background: var(--cycl-green);
-    /* Old browsers */
-
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0b5fdd', endColorstr='#4ca3ef', GradientType=1);
-    /* IE6-9 fallback on horizontal gradient */
-    color: #fff;
-    text-align: center;
-    padding: 2% 0%;
-  }
-
-  .meet-the-dev {
-    margin-bottom: 10px;
-    text-shadow: 1px 2px 8px rgba(0, 0, 0, .3);
-  }
-
-  .copyright-text {
-    font-size: 14px;
-  }
-
-  /* ------------for mobile------------ */
-  /* Extra small devices (phones, 600px and down) */
-  @media only screen and (max-width: 600px) {
-
-    /* global rules */
-    h1 {
-      font-size: 1.2rem !important;
-    }
-
-    h2,
-    h3,
-    h4 {
-      font-size: 1rem !important;
-    }
-
-    p {
-      font-size: 16px !important;
-    }
-
-    button {
-      padding: 6px !important;
-    }
-
-    /* hero section rules   */
-    #hero {
-      text-align: center;
-    }
-
-    .hero-row {
-      text-align: center;
-      padding-bottom: 20%;
-    }
-
-    .hero-description {
-      margin-top: 0;
-      padding: 20% 0%;
-    }
-
-    .hero-img {
-      display: none;
-    }
-
-    /* features section rules */
-    #features {
-      padding: 10% 10%;
-    }
-
-    /* testimonials section rules */
-    #testimonials {
-      padding: 10% 5%;
-    }
-
-    .carousel-item img {
-      width: 20%;
-    }
-
-    .carousel-item {
-      padding: 5% 5%;
-    }
-
-    .carousel-item p {
-      font-size: 16px !important;
-    }
-
-    /* press section styling */
-    .press-image {
-      width: 20%;
-      padding: 0 2%;
-    }
-
-    /* pricing section styling */
-    #pricing {
-      padding: 10% 10%;
-    }
-
-    /* footer section styling */
-    #footer {
-      padding: 5% 2.5% 3% 2.5%;
-    }
-
-    .meet-the-dev {
-      margin-bottom: 5px;
-    }
-
-    .social-buttons button {
-      padding: 0 5px;
-      margin: 3px 0;
-    }
-
-    /* cta section rules */
-    #cta {
-      margin: 10% 0;
-    }
-  }
-
-  /* ------------for tablet------------ */
-  /* Small devices (portrait tablets and large phones, 600px and up) */
-  @media only screen and (max-width: 990px) {
-
-    /* hero section rules */
-    #hero {
-      text-align: center;
-    }
-
-    .hero-title {
-      margin-left: 0px;
-      padding: 0 5%;
-    }
-
-    .hero-row {
-      margin-top: 0;
-    }
-
-    .hero-description {
-      margin-top: 0;
-      padding: 20% 5%;
-    }
-
-    .navbar {
-      border-radius: 14px;
-      margin-top: 12px;
-    }
-
-    .terms-card {
-      padding: 18px 16px;
-    }
-
-    .hero-img {
-      display: none;
-    }
-
-    /* testimonials section rules */
-    #testimonials {
-      padding: 5% 10%;
-    }
-
-    .carousel-inner {
-      margin-top: 5%;
-      height: 300px;
-    }
-
-    .carousel-item h2 {
-      margin-top: 5%;
-      font-size: 1.2rem !important;
-    }
-
-    .carousel-item img {
-      width: 15%;
-    }
-
-    /* pricing section rules */
-    #pricing {
-      padding: 10% 5%;
-    }
-
-    .list-unstyled li {
-      font-size: 16px !important;
-    }
-  }
-
-  /* Medium devices (landscape tablets, 768px and up) */
-  @media only screen and (min-width: 768px) {}
-
-  /* ------------for desktop------------ */
-  /* Large devices (laptops/desktops, 992px and up) */
-  @media only screen and (min-width: 992px) {
-
-    /* Extra large devices (large laptops and desktops, 1200px and up) */
-    @media only screen and (min-width: 1200px) {}
-
-  }
-
-  /*--------------------------------------------------------------
-|                                                              |
-|     Media Queries & Responsive Styling Ends Right Here      |
-|                                                              |
----------------------------------------------------------------*/
-</style>
 
 </html>
