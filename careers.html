@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cycl, About Us</title>
+  <title>Cycl, Careers</title>
   <link rel="shortcut icon" href="image/80.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -62,11 +62,6 @@
     a {
       color: inherit;
       text-decoration: none;
-    }
-
-    img {
-      display: block;
-      max-width: 100%;
     }
 
     h1,
@@ -128,20 +123,10 @@
       transition: background 0.3s, color 0.3s, border-color 0.3s, backdrop-filter 0.3s;
     }
 
-    nav.top.over-light {
-      color: var(--ink);
-    }
-
-    nav.top.scrolled.over-dark {
+    nav.top.scrolled {
       background: rgba(15, 51, 32, 0.72);
       backdrop-filter: blur(14px);
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    nav.top.scrolled.over-light {
-      background: rgba(242, 237, 227, 0.85);
-      backdrop-filter: blur(14px);
-      border-bottom: 1px solid var(--rule);
     }
 
     .brand {
@@ -166,6 +151,7 @@
       width: 100%;
       height: 100%;
       object-fit: contain;
+      display: block;
     }
 
     .brand-word {
@@ -234,9 +220,9 @@
     .hero::after {
       content: '';
       position: absolute;
-      right: -20%;
-      top: -20%;
-      width: 70%;
+      right: -18%;
+      top: -18%;
+      width: 68%;
       aspect-ratio: 1;
       background: radial-gradient(circle, rgba(44, 182, 114, 0.35), transparent 60%);
       pointer-events: none;
@@ -250,10 +236,6 @@
       margin-bottom: 48px;
       position: relative;
       z-index: 1;
-    }
-
-    .hero-crumb a:hover {
-      color: var(--paper);
     }
 
     .hero-grid {
@@ -292,39 +274,11 @@
       line-height: 1.5;
     }
 
-    .hero-stats {
-      margin-top: 48px;
-      padding-top: 24px;
-      border-top: 1px solid rgba(242, 237, 227, 0.12);
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 32px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .hero-stats .n {
-      font-family: 'Fraunces', serif;
-      font-size: 36px;
-      color: var(--paper);
-      letter-spacing: -0.03em;
-      line-height: 1;
-    }
-
-    .hero-stats .n em {
-      background: var(--lime-grad);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .hero-stats .l {
-      font-size: 11px;
-      margin-top: 8px;
-      color: rgba(242, 237, 227, 0.55);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      font-family: 'JetBrains Mono', monospace;
+    .hero-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 34px;
     }
 
     section {
@@ -355,63 +309,49 @@
       background: currentColor;
     }
 
-    .story-grid {
+    .work-grid {
       display: grid;
       grid-template-columns: 1fr 1.25fr;
       gap: 80px;
       align-items: start;
     }
 
-    .story-grid h2 {
+    .work-grid h2 {
       font-size: clamp(42px, 5vw, 86px);
       font-weight: 300;
     }
 
-    .story-grid h2 em {
+    .work-grid h2 em {
       background: var(--lime-grad);
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
-    .story-copy p {
+    .work-copy p {
       font-size: 18px;
       color: var(--ink-soft);
-      max-width: 700px;
+      max-width: 720px;
     }
 
-    .story-copy p+p {
+    .work-copy p+p {
       margin-top: 20px;
     }
 
-    .story-photo {
-      margin-top: 56px;
-      border-radius: 20px;
-      overflow: hidden;
-      border: 1px solid var(--rule);
-      background: var(--paper-2);
-    }
-
-    .story-photo img {
-      width: 100%;
-      aspect-ratio: 16/8;
-      object-fit: cover;
-    }
-
-    .principles {
+    .values {
       background: var(--moss);
       color: var(--paper);
     }
 
-    .principles .eyebrow {
+    .values .eyebrow {
       color: rgba(242, 237, 227, 0.55);
     }
 
-    .principles .eyebrow .num {
+    .values .eyebrow .num {
       color: var(--lime);
     }
 
-    .principles-head {
+    .values-head {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 80px;
@@ -419,55 +359,55 @@
       margin-bottom: 72px;
     }
 
-    .principles-head h2 {
+    .values-head h2 {
       font-size: clamp(40px, 4.8vw, 84px);
       font-weight: 300;
       color: var(--paper);
     }
 
-    .principles-head h2 em {
+    .values-head h2 em {
       color: var(--lime);
     }
 
-    .principles-head p {
+    .values-head p {
       color: rgba(242, 237, 227, 0.65);
       max-width: 500px;
       justify-self: end;
     }
 
-    .principle-grid {
+    .value-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
     }
 
-    .principle {
+    .value-card {
       border: 1px solid rgba(242, 237, 227, 0.12);
       border-radius: 16px;
-      padding: 32px 28px;
+      padding: 32px 24px;
       background: rgba(255, 255, 255, 0.03);
     }
 
-    .principle .tag {
+    .value-card .tag {
       font-family: 'JetBrains Mono', monospace;
       font-size: 11px;
       letter-spacing: 0.1em;
       color: var(--lime);
-      margin-bottom: 56px;
+      margin-bottom: 48px;
     }
 
-    .principle h3 {
+    .value-card h3 {
       color: var(--paper);
-      font-size: 30px;
-      margin-bottom: 14px;
+      font-size: 26px;
+      margin-bottom: 12px;
     }
 
-    .principle p {
+    .value-card p {
       color: rgba(242, 237, 227, 0.58);
-      font-size: 14px;
+      font-size: 13px;
     }
 
-    .timeline-head {
+    .roles-head {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 80px;
@@ -475,65 +415,87 @@
       margin-bottom: 64px;
     }
 
-    .timeline-head h2 {
+    .roles-head h2 {
       font-size: clamp(40px, 4.8vw, 84px);
       font-weight: 300;
     }
 
-    .timeline-head p {
+    .roles-head p {
       color: var(--ink-soft);
       max-width: 500px;
       justify-self: end;
     }
 
-    .timeline {
-      border-top: 1px solid var(--rule);
+    .jobs-panel {
+      background: #fff;
+      border: 1px solid var(--rule);
+      border-radius: 20px;
+      overflow: hidden;
     }
 
-    .timeline-row {
+    .jobs-row {
       display: grid;
-      grid-template-columns: 120px 1fr 1.4fr;
-      gap: 40px;
-      padding: 36px 0;
+      grid-template-columns: 1fr auto;
+      gap: 28px;
+      padding: 34px 36px;
+      align-items: center;
       border-bottom: 1px solid var(--rule);
-      align-items: baseline;
     }
 
-    .timeline-row .year {
+    .jobs-row:last-child {
+      border-bottom: none;
+    }
+
+    .jobs-row .label {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      color: var(--ink-mute);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--lime-2);
+      margin-bottom: 10px;
     }
 
-    .timeline-row h3 {
-      font-size: 30px;
-      font-weight: 300;
+    .jobs-row h3 {
+      font-size: 32px;
+      margin-bottom: 10px;
     }
 
-    .timeline-row p {
+    .jobs-row p {
       color: var(--ink-soft);
-      max-width: 620px;
+      max-width: 740px;
     }
 
-    .cta {
+    .status-pill {
+      border: 1px solid var(--rule);
+      border-radius: 100px;
+      padding: 10px 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-mute);
+      white-space: nowrap;
+    }
+
+    .contact-band {
       background: var(--ink);
       color: var(--paper);
       text-align: center;
       padding: 120px 36px 140px;
     }
 
-    .cta h2 {
+    .contact-band h2 {
       font-size: clamp(46px, 6vw, 120px);
       font-weight: 300;
       max-width: 1000px;
       margin: 0 auto 28px;
     }
 
-    .cta h2 em {
+    .contact-band h2 em {
       color: var(--lime);
     }
 
-    .cta p {
+    .contact-band p {
       color: rgba(242, 237, 227, 0.65);
       max-width: 620px;
       margin: 0 auto 36px;
@@ -571,10 +533,6 @@
       border-color: var(--paper);
     }
 
-    .btn+.btn {
-      margin-left: 10px;
-    }
-
     .arr {
       width: 22px;
       height: 22px;
@@ -592,14 +550,6 @@
       place-items: center;
       font-size: 12px;
       color: #fff;
-    }
-
-    .btn-ghost .arr {
-      background: var(--paper);
-    }
-
-    .btn-ghost .arr::after {
-      color: var(--moss);
     }
 
     footer {
@@ -685,40 +635,40 @@
       }
 
       .hero-grid,
-      .story-grid,
-      .principles-head,
-      .timeline-head {
+      .work-grid,
+      .values-head,
+      .roles-head {
         grid-template-columns: 1fr;
         gap: 40px;
-      }
-
-      .hero-stats,
-      .principle-grid {
-        grid-template-columns: 1fr;
       }
 
       section {
         padding: 80px 20px;
       }
 
-      .timeline-row {
-        grid-template-columns: 70px 1fr;
-        gap: 20px;
+      .value-grid {
+        grid-template-columns: 1fr 1fr;
       }
 
-      .timeline-row p {
-        grid-column: 2;
+      .jobs-row {
+        grid-template-columns: 1fr;
       }
 
       .foot-top {
         grid-template-columns: 1fr 1fr;
       }
     }
+
+    @media (max-width: 640px) {
+      .value-grid {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 
 <body>
-  <nav class="top over-dark">
+  <nav class="top">
     <a href="index.html" class="brand">
       <span class="brand-mark"><img src="assets/cycl-logo.png" alt=""></span>
       <span class="brand-word">Cycl</span>
@@ -726,13 +676,13 @@
     <div class="nav-mid">
       <a href="index.html#system">System</a>
       <a href="index.html#for-business">Business</a>
-      <a href="operator.html">Business Platform</a>
-      <a href="aboutUs.html" class="active">About</a>
+      <a href="operator.html">Operators</a>
+      <a href="aboutUs.html">About</a>
     </div>
     <div class="nav-right">
-      <a href="career.html">Careers</a>
+      <a href="career.html" class="active">Careers</a>
       <span class="sep">/</span>
-      <a href="kontaktnettside.html" class="nav-pill"><span>Contact</span></a>
+      <a href="mailto:team@cyclmobileapp.com" class="nav-pill"><span>Email us</span></a>
     </div>
   </nav>
 
@@ -741,130 +691,117 @@
       <div class="hero-crumb mono">
         <a href="index.html">Cycl</a>
         <span>/</span>
-        <span>About us</span>
+        <span>Careers</span>
       </div>
       <div class="hero-grid">
-        <h1 class="reveal">We are building a cleaner <em>return loop.</em></h1>
+        <h1 class="reveal">Build practical climate tools <em>with us.</em></h1>
         <div class="hero-copy reveal d1">
-          <p>Cycl is a Copenhagen born company turning bottle and can returns into a simple mobile experience. We
-            combine Cycl stations, AI recognition, partner rewards, and analytics tools so more containers make it
-            back into useful material streams while businesses learn more about customer behavior.</p>
-        </div>
-      </div>
-      <div class="hero-stats reveal d2">
-        <div>
-          <div class="n"><em>2022</em></div>
-          <div class="l">Founded</div>
-        </div>
-        <div>
-          <div class="n"><em>300B+</em></div>
-          <div class="l">Containers missed yearly</div>
-        </div>
-        <div>
-          <div class="n"><em>1</em></div>
-          <div class="l">Loop to close</div>
+          <p>We are a small team working on the physical and digital infrastructure behind smarter bottle and can
+            returns. The work touches product, AI, operations, partnerships, and city level deployment.</p>
+          <div class="hero-actions">
+            <a href="#open-roles" class="btn btn-primary"><span>See open roles</span><span class="arr"></span></a>
+            <a href="mailto:team@cyclmobileapp.com" class="btn btn-ghost"><span>Send your interest</span><span
+                class="arr"></span></a>
+          </div>
         </div>
       </div>
     </section>
 
     <section>
       <div class="frame">
-        <div class="story-grid">
+        <div class="work-grid">
           <div>
-            <div class="eyebrow reveal"><span>01</span> Why we exist</div>
-            <h2 class="reveal d1">Recycling should feel like a normal part of everyday movement, <em>not a separate
-                chore.</em></h2>
+            <div class="eyebrow reveal"><span>01</span> Working at Cycl</div>
+            <h2 class="reveal d1">You work close to the product, the users, and the real world.</h2>
           </div>
-          <div class="story-copy">
-            <p class="reveal d1">Traditional deposit systems work well where expensive machines are installed, but many
-              places never get that infrastructure. Cycl starts from the opposite direction. We use the phone people
-              already carry, Cycl stations that fit real spaces, and software that connects every return to rewards,
-              customer insight, and better business decisions.</p>
-            <p class="reveal d2">Our work is practical. We care about streets, schools, libraries, malls, cafés,
-              campuses, and venues where people already finish drinks. The goal is to make a return point fit naturally
-              into those places, then make every return visible, useful, and rewarding.</p>
+          <div class="work-copy">
+            <p class="reveal d1">Cycl is not only software on a screen. It lives in shops, libraries, malls, schools,
+              and streets where people return bottles and cans. That means our team thinks about the whole system, from
+              a camera flow in the app to the experience of placing a return station in a busy location.</p>
+            <p class="reveal d2">We value people who can move between detail and outcome. Sometimes the right answer is
+              a better interface. Sometimes it is a clearer partner process. Sometimes it is standing next to a station
+              and watching where people hesitate.</p>
           </div>
-        </div>
-        <div class="story-photo reveal d2">
-          <img src="image/mallcycl.png" alt="Cycl return station in a public setting">
         </div>
       </div>
     </section>
 
-    <section class="principles">
+    <section class="values">
       <div class="frame">
-        <div class="principles-head">
+        <div class="values-head">
           <div>
-            <div class="eyebrow reveal"><span class="num">02</span> How we think</div>
-            <h2 class="reveal d1">The best climate tools are <em>easy to place, easy to use, and easy to trust.</em>
-            </h2>
+            <div class="eyebrow reveal"><span class="num">02</span> How we work</div>
+            <h2 class="reveal d1">Direct, curious, and <em>serious about execution.</em></h2>
           </div>
-          <p class="reveal d2">Cycl is built around a few operating principles that keep the product grounded as it
-            grows from pilots to larger networks.</p>
+          <p class="reveal d2">We are building something that has to work outside a presentation deck. That shapes the
+            way we make decisions.</p>
         </div>
-        <div class="principle-grid">
-          <article class="principle reveal d1">
-            <div class="tag">01 / Access</div>
-            <h3>Put returns where people are</h3>
-            <p>Return points should be close to daily routines. More convenient locations create more returns and
-              cleaner data.</p>
+        <div class="value-grid">
+          <article class="value-card reveal">
+            <div class="tag">01 / Field first</div>
+            <h3>Reality beats theory</h3>
+            <p>We learn from real locations and real users before polishing ideas too far.</p>
           </article>
-          <article class="principle reveal d2">
-            <div class="tag">02 / Simplicity</div>
-            <h3>Keep hardware simple</h3>
-            <p>Cycl stations do not need to be complicated. The intelligence can live in the app and platform.</p>
+          <article class="value-card reveal d1">
+            <div class="tag">02 / Clear ownership</div>
+            <h3>Small team, high trust</h3>
+            <p>People are expected to own outcomes, ask for context, and keep work moving.</p>
           </article>
-          <article class="principle reveal d3">
-            <div class="tag">03 / Proof</div>
-            <h3>Make performance measurable</h3>
-            <p>Every return should create a record that can support operations, partner value, and better business
-              decisions.</p>
+          <article class="value-card reveal d2">
+            <div class="tag">03 / Useful craft</div>
+            <h3>Design serves behavior</h3>
+            <p>Good design should make returning a bottle feel obvious, fast, and worth doing.</p>
+          </article>
+          <article class="value-card reveal d3">
+            <div class="tag">04 / Measured impact</div>
+            <h3>Proof matters</h3>
+            <p>Every return should create value for users, partners, operators, and the planet.</p>
           </article>
         </div>
       </div>
     </section>
 
-    <section>
+    <section id="open-roles">
       <div class="frame">
-        <div class="timeline-head">
+        <div class="roles-head">
           <div>
-            <div class="eyebrow reveal"><span>03</span> Our path</div>
-            <h2 class="reveal d1">From idea to network, one station at a time.</h2>
+            <div class="eyebrow reveal"><span>03</span> Jobs</div>
+            <h2 class="reveal d1">Open roles will live here.</h2>
           </div>
-          <p class="reveal d2">Cycl grows by testing in real places, learning from businesses and users, then turning
-            those learnings into a stronger platform.</p>
+          <p class="reveal d2">We are not hiring for a specific role right now, but we expect to need more people as the
+            network grows.</p>
         </div>
-        <div class="timeline">
-          <div class="timeline-row reveal">
-            <div class="year">Start</div>
-            <h3>The problem</h3>
-            <p>Too many bottles and cans miss recycling systems because return infrastructure is too expensive, too
-              large, or too far away.</p>
+        <div class="jobs-panel reveal d1">
+          <div class="jobs-row">
+            <div>
+              <div class="label">Current status</div>
+              <h3>No open roles right now</h3>
+              <p>There are no active job postings today. If Cycl feels like a place where you could do your best work,
+                you are welcome to send us a short email with who you are, what you are strong at, and why the mission
+                fits you.</p>
+            </div>
+            <div class="status-pill">Not hiring</div>
           </div>
-          <div class="timeline-row reveal d1">
-            <div class="year">Build</div>
-            <h3>The platform</h3>
-            <p>We pair mobile recognition with Cycl stations and a dashboard that helps partners understand returns,
-              rewards, customer behavior, and performance.</p>
-          </div>
-          <div class="timeline-row reveal d2">
-            <div class="year">Next</div>
-            <h3>The network</h3>
-            <p>We are expanding through businesses and public locations that want practical recycling infrastructure,
-              better customer insight, and stronger local engagement.</p>
+          <div class="jobs-row">
+            <div>
+              <div class="label">Future areas</div>
+              <h3>Product, engineering, operations, partnerships</h3>
+              <p>As we grow, we may need people who can help with mobile product, computer vision, partner growth, city
+                operations, station deployment, support, and data reporting.</p>
+            </div>
+            <a class="btn btn-primary" href="mailto:team@cyclmobileapp.com"><span>Email Cycl</span><span
+                class="arr"></span></a>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="cta">
-      <h2 class="reveal">Want to build the <em>next loop</em> with us?</h2>
-      <p class="reveal d1">We are always open to businesses, partners, and future team members who care about practical
-        recycling infrastructure and better customer experiences.</p>
-      <div class="reveal d2">
-        <a href="operator.html#apply" class="btn btn-primary"><span>Start with Cycl</span><span class="arr"></span></a>
-        <a href="career.html" class="btn btn-ghost"><span>See careers</span><span class="arr"></span></a>
-      </div>
+    <section class="contact-band">
+      <h2 class="reveal">Think you can help Cycl <em>before a role exists?</em></h2>
+      <p class="reveal d1">Send us a concise note at team@cyclmobileapp.com. Include links to work, a few lines about
+        what you want to build, and where you think Cycl could use your strength.</p>
+      <a href="mailto:team@cyclmobileapp.com" class="btn btn-primary reveal d2"><span>Send an email</span><span
+          class="arr"></span></a>
     </section>
   </main>
 
@@ -883,7 +820,7 @@
         <ul>
           <li><a href="index.html">Consumer app</a></li>
           <li><a href="index.html#for-business">For business</a></li>
-          <li><a href="operator.html">Business platform</a></li>
+          <li><a href="operator.html">Operator platform</a></li>
           <li><a href="/esg-rapport/esg-dashboard-modern.html" target="_blank" rel="noopener">Analytics</a></li>
         </ul>
       </div>
@@ -908,7 +845,7 @@
     </div>
     <div class="foot-bot">
       <span>© 2026 Cycl ApS · CVR 45873129</span>
-      <span>About Cycl ✦</span>
+      <span>Careers</span>
     </div>
   </footer>
 

@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cycl, Press</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,300..900,0..100,0..1&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --moss: #183a2f;
+      --deep: #0d211b;
+      --leaf: #2f7d32;
+      --lime: #c7f24f;
+      --mint: #e8f5df;
+      --paper: #f7f3e9;
+      --cream: #fffaf0;
+      --clay: #c96d3a;
+      --ink: #14231d;
+      --muted: #6f786f;
+      --line: rgba(20, 35, 29, .14);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 15% 10%, rgba(199, 242, 79, .2), transparent 24rem),
+        linear-gradient(180deg, #f8f3e7 0%, #edf5e8 44%, #f7f3e9 100%);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .13;
+      z-index: 1;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    nav.top {
+      position: fixed;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(1180px, calc(100% - 32px));
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      border-radius: 28px;
+      background: rgba(255, 250, 240, .83);
+      border: 1px solid rgba(255, 255, 255, .65);
+      box-shadow: 0 20px 60px rgba(13, 33, 27, .14);
+      backdrop-filter: blur(18px);
+      transition: background .25s ease, color .25s ease, transform .25s ease;
+    }
+
+    nav.top.over-dark {
+      background: rgba(13, 33, 27, .76);
+      color: var(--cream);
+      border-color: rgba(255, 255, 255, .16);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 120px;
+      font-weight: 800;
+    }
+
+    .brand-mark {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: var(--leaf);
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      box-shadow: 0 10px 24px rgba(47, 125, 50, .26);
+    }
+
+    .brand-mark img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .brand-word {
+      letter-spacing: 0;
+      font-size: 1.1rem;
+    }
+
+    .nav-mid {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px;
+      border-radius: 999px;
+      background: rgba(24, 58, 47, .06);
+    }
+
+    nav.over-dark .nav-mid {
+      background: rgba(255, 255, 255, .08);
+    }
+
+    .nav-mid a,
+    .nav-right a:not(.nav-pill) {
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: .84rem;
+      font-weight: 700;
+      color: rgba(20, 35, 29, .72);
+      transition: background .2s ease, color .2s ease;
+    }
+
+    nav.over-dark .nav-mid a,
+    nav.over-dark .nav-right a:not(.nav-pill) {
+      color: rgba(255, 250, 240, .74);
+    }
+
+    .nav-mid a:hover,
+    .nav-mid a.active,
+    .nav-right a:not(.nav-pill):hover,
+    .nav-right a.active {
+      background: rgba(47, 125, 50, .14);
+      color: inherit;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sep {
+      opacity: .35;
+    }
+
+    .nav-pill,
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      border-radius: 999px;
+      font-weight: 800;
+      border: 1px solid transparent;
+      min-height: 46px;
+      white-space: nowrap;
+    }
+
+    .nav-pill {
+      padding: 11px 16px;
+      color: #102019;
+      background: var(--lime);
+      box-shadow: 0 14px 28px rgba(199, 242, 79, .22);
+    }
+
+    section {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero {
+      min-height: 92vh;
+      padding: 130px clamp(20px, 5vw, 76px) 64px;
+      color: var(--cream);
+      background:
+        linear-gradient(135deg, rgba(13, 33, 27, .76), rgba(13, 33, 27, .94)),
+        url("image/mallcycl.png") center / cover;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0 0;
+      height: 30%;
+      background: linear-gradient(0deg, var(--paper), transparent);
+      opacity: .18;
+      pointer-events: none;
+    }
+
+    .hero-crumb {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 36px;
+      color: rgba(255, 250, 240, .72);
+      position: relative;
+      z-index: 1;
+    }
+
+    .mono,
+    .eyebrow,
+    .label {
+      font-family: "JetBrains Mono", monospace;
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(280px, .55fr);
+      gap: clamp(28px, 5vw, 72px);
+      align-items: end;
+      position: relative;
+      z-index: 1;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1,
+    h2 {
+      font-family: Fraunces, serif;
+      font-weight: 760;
+      letter-spacing: 0;
+      line-height: .94;
+    }
+
+    h1 {
+      font-size: clamp(4rem, 11vw, 11.6rem);
+      margin-bottom: 0;
+      max-width: 11ch;
+    }
+
+    em {
+      font-family: Fraunces, serif;
+      font-style: italic;
+      color: var(--lime);
+    }
+
+    .hero-copy {
+      max-width: 520px;
+      color: rgba(255, 250, 240, .78);
+      font-size: clamp(1rem, 1.5vw, 1.2rem);
+      line-height: 1.65;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 26px;
+    }
+
+    .btn {
+      padding: 14px 20px;
+      font-size: .92rem;
+    }
+
+    .btn-primary {
+      background: var(--lime);
+      color: #102019;
+      box-shadow: 0 18px 36px rgba(199, 242, 79, .25);
+    }
+
+    .btn-ghost {
+      color: inherit;
+      background: rgba(255, 255, 255, .1);
+      border-color: rgba(255, 255, 255, .2);
+    }
+
+    .arr {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: currentColor;
+      mask: radial-gradient(circle at 65% 50%, transparent 3px, #000 3.5px), linear-gradient(#000 0 0);
+    }
+
+    .frame {
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: clamp(72px, 9vw, 118px) 0;
+    }
+
+    .intro-grid,
+    .contact-grid {
+      display: grid;
+      grid-template-columns: .8fr 1.2fr;
+      gap: clamp(28px, 6vw, 86px);
+      align-items: start;
+    }
+
+    .eyebrow {
+      color: var(--leaf);
+      font-size: .82rem;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .eyebrow span {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--lime);
+      color: var(--deep);
+      display: grid;
+      place-items: center;
+    }
+
+    h2 {
+      color: var(--deep);
+      font-size: clamp(2.7rem, 5.5vw, 6rem);
+      margin-bottom: 22px;
+    }
+
+    h2 em {
+      color: var(--leaf);
+    }
+
+    .lead {
+      color: var(--muted);
+      font-size: clamp(1.03rem, 1.4vw, 1.22rem);
+      line-height: 1.78;
+    }
+
+    .topic-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-top: 38px;
+    }
+
+    .topic,
+    .contact-panel {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 250, 240, .74);
+      box-shadow: 0 22px 56px rgba(13, 33, 27, .08);
+    }
+
+    .topic {
+      padding: 24px;
+      min-height: 180px;
+    }
+
+    .topic .tag,
+    .label {
+      color: var(--leaf);
+      font-size: .72rem;
+    }
+
+    .topic h3 {
+      font-size: 1.08rem;
+      margin: 26px 0 10px;
+    }
+
+    .topic p {
+      margin-bottom: 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: .95rem;
+    }
+
+    .media-band {
+      background: var(--deep);
+      color: var(--cream);
+    }
+
+    .media-band .frame {
+      display: grid;
+      grid-template-columns: minmax(0, .9fr) minmax(320px, 1.1fr);
+      gap: clamp(30px, 5vw, 74px);
+      align-items: center;
+    }
+
+    .media-band h2 {
+      color: var(--cream);
+    }
+
+    .media-band h2 em {
+      color: var(--lime);
+    }
+
+    .media-band .lead {
+      color: rgba(255, 250, 240, .72);
+    }
+
+    .photo {
+      overflow: hidden;
+      border-radius: 8px;
+      min-height: 420px;
+      border: 1px solid rgba(255, 255, 255, .16);
+      box-shadow: 0 36px 90px rgba(0, 0, 0, .24);
+    }
+
+    .photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .contact-panel {
+      padding: clamp(28px, 4vw, 48px);
+    }
+
+    .contact-panel h3 {
+      font-family: Fraunces, serif;
+      font-size: clamp(2rem, 4vw, 4rem);
+      line-height: 1;
+      margin-bottom: 18px;
+    }
+
+    .email-link {
+      display: inline-flex;
+      margin: 18px 0 26px;
+      font-size: clamp(1rem, 2vw, 1.4rem);
+      color: var(--leaf);
+      font-weight: 800;
+      overflow-wrap: anywhere;
+    }
+
+    footer {
+      position: relative;
+      z-index: 2;
+      background: #081611;
+      color: var(--cream);
+      padding: 64px clamp(20px, 5vw, 76px) 28px;
+    }
+
+    .foot-top {
+      display: grid;
+      grid-template-columns: 1.3fr repeat(3, .7fr);
+      gap: 34px;
+      width: min(1180px, 100%);
+      margin: 0 auto 56px;
+    }
+
+    .foot-brand p,
+    .foot-col a {
+      color: rgba(255, 250, 240, .68);
+    }
+
+    .foot-brand p {
+      max-width: 350px;
+      line-height: 1.7;
+    }
+
+    .foot-col h5 {
+      margin: 0 0 18px;
+      font-size: .82rem;
+      text-transform: uppercase;
+      letter-spacing: 0;
+      color: var(--lime);
+    }
+
+    .foot-col ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 12px;
+    }
+
+    .foot-col a:hover {
+      color: var(--cream);
+    }
+
+    .foot-bot {
+      width: min(1180px, 100%);
+      margin: 0 auto;
+      padding-top: 22px;
+      border-top: 1px solid rgba(255, 255, 255, .12);
+      display: flex;
+      justify-content: space-between;
+      color: rgba(255, 250, 240, .5);
+      font-size: .86rem;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity .8s ease, transform .8s ease;
+    }
+
+    .reveal.in {
+      opacity: 1;
+      transform: none;
+    }
+
+    .d1 {
+      transition-delay: .1s;
+    }
+
+    .d2 {
+      transition-delay: .2s;
+    }
+
+    .d3 {
+      transition-delay: .3s;
+    }
+
+    @media (max-width: 900px) {
+      nav.top {
+        top: 10px;
+        width: calc(100% - 20px);
+        border-radius: 20px;
+      }
+
+      .nav-mid {
+        display: none;
+      }
+
+      .brand {
+        min-width: auto;
+      }
+
+      .hero {
+        min-height: 88vh;
+        padding: 112px 20px 44px;
+      }
+
+      .hero-grid,
+      .intro-grid,
+      .contact-grid,
+      .media-band .frame,
+      .foot-top {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: clamp(3.6rem, 18vw, 6rem);
+      }
+
+      h2 {
+        font-size: clamp(2.7rem, 13vw, 4.4rem);
+      }
+
+      .topic-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .photo {
+        min-height: 320px;
+      }
+
+      .foot-bot {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="top over-dark">
+    <a href="index.html" class="brand">
+      <span class="brand-mark"><img src="assets/cycl-logo.png" alt=""></span>
+      <span class="brand-word">Cycl</span>
+    </a>
+    <div class="nav-mid">
+      <a href="index.html#system">System</a>
+      <a href="index.html#for-business">Business</a>
+      <a href="operator.html">Business Platform</a>
+      <a href="aboutUs.html">About</a>
+    </div>
+    <div class="nav-right">
+      <a href="career.html">Careers</a>
+      <span class="sep">/</span>
+      <a href="mailto:nastudinmire@cyclmobile.com" class="nav-pill"><span>Press contact</span></a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero">
+      <div class="hero-crumb mono">
+        <a href="index.html">Cycl</a>
+        <span>/</span>
+        <span>Press</span>
+      </div>
+      <div class="hero-grid">
+        <h1 class="reveal">Press and media <em>for Cycl.</em></h1>
+        <div class="hero-copy reveal d1">
+          <p>For press related questions, interviews, background information, images, or company details, contact us
+            directly and we will help you with the right material.</p>
+          <div class="hero-actions">
+            <a href="mailto:nastudinmire@cyclmobile.com" class="btn btn-primary"><span>Email press contact</span><span
+                class="arr"></span></a>
+            <a href="#about-cycl" class="btn btn-ghost"><span>About Cycl</span><span class="arr"></span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about-cycl">
+      <div class="frame">
+        <div class="intro-grid">
+          <div>
+            <div class="eyebrow reveal"><span>01</span> About Cycl</div>
+            <h2 class="reveal d1">We make bottle and can returns easier to place, use, and measure.</h2>
+          </div>
+          <div>
+            <p class="lead reveal d1">Cycl builds mobile first return infrastructure for bottles and cans. The platform
+              turns simple return collectors into connected stations with AI recognition, partner rewards, and impact
+              reporting.</p>
+            <p class="lead reveal d2">Our goal is to make return points fit into everyday places, from malls and
+              campuses to libraries, venues, offices, and public locations. More convenient return points can help more
+              containers make it back into useful material streams.</p>
+          </div>
+        </div>
+        <div class="topic-grid">
+          <article class="topic reveal">
+            <div class="tag">Topic 01</div>
+            <h3>Return infrastructure</h3>
+            <p>How simple collectors can become connected return stations.</p>
+          </article>
+          <article class="topic reveal d1">
+            <div class="tag">Topic 02</div>
+            <h3>Consumer behavior</h3>
+            <p>How rewards and mobile flows can make recycling feel easier.</p>
+          </article>
+
+          <article class="topic reveal d3">
+            <div class="tag">Topic 04</div>
+            <h3>Impact reporting</h3>
+            <p>How returns can become visible data for partners and business teams.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="media-band">
+      <div class="frame">
+        <div>
+          <div class="eyebrow reveal"><span>02</span> Media material</div>
+          <h2 class="reveal d1">Need images, background, or a comment?</h2>
+          <p class="lead reveal d2">We do not have a public press kit on this page yet. Send a note with what you need,
+            your deadline, and where the story will appear, and we will share relevant material where possible.</p>
+        </div>
+        <div class="photo reveal d2">
+          <img src="image/mallcycl.png" alt="Cycl return station in a public setting">
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="frame">
+        <div class="contact-grid">
+          <div>
+            <div class="eyebrow reveal"><span>03</span> Press contact</div>
+            <h2 class="reveal d1">Contact us for press related requests.</h2>
+          </div>
+          <div class="contact-panel reveal d2">
+            <div class="label">Email</div>
+            <h3>Press enquiries</h3>
+            <a class="email-link" href="mailto:nastudinmire@cyclmobile.com">nastudinmire@cyclmobile.com</a>
+            <p class="lead">Please include your name, publication, request, deadline, and any links that help us
+              understand the story.</p>
+            <a href="mailto:nastudinmire@cyclmobile.com" class="btn btn-primary"><span>Send press email</span><span
+                class="arr"></span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="foot-top">
+      <div class="foot-brand">
+        <a href="index.html" class="brand">
+          <span class="brand-mark" style="width:36px;height:36px;border-radius:10px;"><img src="assets/cycl-logo.png"
+              alt=""></span>
+          <span class="brand-word">Cycl</span>
+        </a>
+        <p>A new loop for every bottle &amp; can. Built for any city, deployed wherever a return point belongs.</p>
+      </div>
+      <div class="foot-col">
+        <h5>Product</h5>
+        <ul>
+          <li><a href="index.html">Consumer app</a></li>
+          <li><a href="index.html#for-business">For business</a></li>
+          <li><a href="operator.html">Business Platform</a></li>
+          <li><a href="/esg-rapport/esg-dashboard-modern.html" target="_blank" rel="noopener">Analytics</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h5>Company</h5>
+        <ul>
+          <li><a href="aboutUs.html">About</a></li>
+          <li><a href="index.html#partners">Partners</a></li>
+          <li><a href="press.html">Press</a></li>
+          <li><a href="career.html">Careers</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h5>Contact</h5>
+        <ul>
+          <li><a href="mailto:team@cyclmobileapp.com">team@cyclmobileapp.com</a></li>
+          <li><a href="https://www.linkedin.com/company/cycl-app/?viewAsMember=true" target="_blank"
+              rel="noopener">LinkedIn</a></li>
+          <li><a href="https://www.instagram.com/cycl.app/" target="_blank" rel="noopener">Instagram</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bot">
+      <span>© 2026 Cycl ApS · CVR 45873129</span>
+      <span>Press</span>
+    </div>
+  </footer>
+
+  <script>
+    const nav = document.querySelector('nav.top');
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.16 });
+
+    revealEls.forEach(el => observer.observe(el));
+
+    const syncNav = () => {
+      if (window.scrollY > 80) nav.classList.remove('over-dark');
+      else nav.classList.add('over-dark');
+    };
+
+    syncNav();
+    window.addEventListener('scroll', syncNav, { passive: true });
+  </script>
+</body>
+
+</html>
