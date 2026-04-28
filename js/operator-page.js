@@ -1,5 +1,16 @@
 const { useState, useEffect, useRef } = React;
-const { firebase, db } = window.getCyclFirebase();
+const firebaseApi =
+  typeof window.getCyclFirebase === "function"
+    ? window.getCyclFirebase()
+    : null;
+const firebase = firebaseApi?.firebase ?? null;
+const db = firebaseApi?.db ?? null;
+
+if (!firebaseApi) {
+  console.error(
+    "Cycl operator form could not initialize because js/site-firebase.js did not load.",
+  );
+}
 const APP_STORE_URL = "https://apps.apple.com/us/app/cycl/id1661695563";
 const PLAY_STORE_URL =
   "https://play.google.com/store/apps/details?id=com.mobile.cycl";
@@ -36,11 +47,16 @@ function withTimeout(promise, timeoutMs) {
 }
 function App() {
   useReveal();
+  const firebaseReady = Boolean(firebase && db);
   const [navMode, setNavMode] = useState("over-dark");
   const [scrolled, setScrolled] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState("");
+  const [submitError, setSubmitError] = useState(
+    firebaseReady
+      ? ""
+      : "The request form is temporarily unavailable because a required site file did not load. Please try again shortly or contact team@cyclmobileapp.com.",
+  );
   useEffect(() => {
     const check = () => {
       const y = window.scrollY + 40;
@@ -63,6 +79,14 @@ function App() {
   }, []);
   const onSubmit = async (e) => {
     e.preventDefault();
+
+    if (!firebaseReady) {
+      setSubmitError(
+        "The request form is temporarily unavailable because a required site file did not load. Please try again shortly or contact team@cyclmobileapp.com.",
+      );
+      return;
+    }
+
     setSubmitError("");
     setIsSubmitting(true);
     const formData = new FormData(e.currentTarget);
@@ -1479,18 +1503,23 @@ function App() {
                   {
                     className: "btn submit-btn",
                     type: "submit",
-                    disabled: isSubmitting,
-                    style: isSubmitting
-                      ? {
-                          opacity: 0.7,
-                          cursor: "wait",
-                        }
-                      : undefined,
+                    disabled: isSubmitting || !firebaseReady,
+                    style:
+                      isSubmitting || !firebaseReady
+                        ? {
+                            opacity: 0.7,
+                            cursor: isSubmitting ? "wait" : "not-allowed",
+                          }
+                        : undefined,
                   },
                   /*#__PURE__*/ React.createElement(
                     "span",
                     null,
-                    isSubmitting ? "Sending..." : "Start with Cycl",
+                    !firebaseReady
+                      ? "Temporarily unavailable"
+                      : isSubmitting
+                        ? "Sending..."
+                        : "Start with Cycl",
                   ),
                   /*#__PURE__*/ React.createElement("span", {
                     className: "arr",
