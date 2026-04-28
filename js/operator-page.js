@@ -194,13 +194,9 @@ function App() {
         {
           className: "nav-right",
         },
-        /*#__PURE__*/ React.createElement(
-          "a",
-          {
-            href: "#",
-          },
-          "Sign in",
-        ),
+        /*#__PURE__*/ React.createElement("a", {
+          href: "#",
+        }),
         /*#__PURE__*/ React.createElement(
           "span",
           {
