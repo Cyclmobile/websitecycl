@@ -1545,6 +1545,144 @@
         padding: 32px 20px;
       }
     }
+
+    @media (max-width: 640px) {
+      nav.top {
+        gap: 12px;
+      }
+
+      .nav-right {
+        font-size: 12px;
+      }
+
+      section,
+      .partners-band,
+      .cta-section,
+      footer {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+
+      .hero {
+        min-height: auto;
+        padding: 92px 16px 24px;
+      }
+
+      .hero-grid {
+        gap: 28px;
+      }
+
+      .hero-meta {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .hero-title {
+        font-size: clamp(42px, 15vw, 72px);
+      }
+
+      .hero-lede {
+        font-size: 15px;
+      }
+
+      .hero-ctas,
+      .cta-section .row {
+        width: 100%;
+      }
+
+      .cta-section .row {
+        flex-direction: column;
+      }
+
+      .hero-stats {
+        gap: 20px;
+      }
+
+      .hero-stat .n {
+        font-size: 32px;
+      }
+
+      .ticker {
+        position: static;
+        margin-top: 28px;
+      }
+
+      .ticker,
+      .ticker-track,
+      .ticker-track span {
+        gap: 28px;
+      }
+
+      .counter-num {
+        font-size: clamp(56px, 20vw, 96px);
+      }
+
+      .counter-band {
+        gap: 24px;
+      }
+
+      .flow-steps,
+      .ops-cards {
+        grid-template-columns: 1fr;
+      }
+
+      .pillars-head {
+        margin-bottom: 48px;
+      }
+
+      .pillar {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 28px 0;
+      }
+
+      .pillar .idx,
+      .pillar .meta,
+      .pillar>*:nth-child(3) {
+        grid-column: auto;
+        text-align: left;
+        padding-top: 0;
+      }
+
+      .plogo {
+        font-size: 18px;
+      }
+
+      .esg-metrics {
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+
+      .ops-list {
+        grid-template-columns: 1fr;
+      }
+
+      .ops-list>div:nth-child(odd) {
+        border-right: none;
+      }
+
+      .foot-top,
+      .foot-bot {
+        grid-template-columns: 1fr;
+      }
+
+      .foot-top {
+        gap: 32px;
+      }
+
+      .foot-bot {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .tw-panel {
+        right: 12px;
+        left: 12px;
+        bottom: 12px;
+        width: auto;
+      }
+    }
   </style>
 </head>
 
