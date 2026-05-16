@@ -579,9 +579,8 @@ function App() {
             Trusted by forward thinking organisations.
           </h4>
           <div className="partners-logos reveal d1">
-            <div className="plogo">Médecins Sans Frontières</div>
             <div className="plogo">Kolding Bibliotekerne</div>
-            <div className="plogo">+ 14 municipalities</div>
+            <div className="plogo">+ 10 businesses</div>
           </div>
         </div>
       </div>
@@ -761,6 +760,9 @@ function App() {
               </li>
               <li>
                 <a href="operator.html">Business platform</a>
+              </li>
+              <li>
+                <a href="partner-portal.html">Partner portal</a>
               </li>
               <li>
                 <a
