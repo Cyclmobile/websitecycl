@@ -5987,25 +5987,13 @@
 
     /* === Tour animation keyframes (used by coachmark) === */
     @keyframes tour-fade {
-      from {
-        opacity: 0;
-      }
-
-      to {
-        opacity: 1;
-      }
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
 
     @keyframes tour-rise {
-      from {
-        opacity: 0;
-        transform: translateY(8px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     /* Coachmark walkthrough (all tab tours) */
@@ -6489,7 +6477,6 @@
        wins against the base sidebar / kpi / topbar rules above.
        ============================================================ */
     @media (max-width: 900px) {
-
       /* Topbar: burger | brand | logout */
       header.bar {
         grid-template-columns: auto 1fr auto;
@@ -6598,7 +6585,6 @@
     }
 
     @media (max-width: 480px) {
-
       .kpi-strip,
       .kpi-strip--bench,
       #section-home .kpi-strip--bench {
@@ -7017,14 +7003,10 @@
               <span class="mono">Newest first</span>
             </div>
             <div class="reward-status-tabs" id="rewardStatusTabs" role="tablist">
-              <button class="reward-status-tab" type="button" role="tab" data-reward-filter="active">Active <span
-                  class="reward-status-tab-count" data-count-for="active">0</span></button>
-              <button class="reward-status-tab" type="button" role="tab" data-reward-filter="all">All <span
-                  class="reward-status-tab-count" data-count-for="all">0</span></button>
-              <button class="reward-status-tab" type="button" role="tab" data-reward-filter="paused">Paused <span
-                  class="reward-status-tab-count" data-count-for="paused">0</span></button>
-              <button class="reward-status-tab" type="button" role="tab" data-reward-filter="archived">Archived <span
-                  class="reward-status-tab-count" data-count-for="archived">0</span></button>
+              <button class="reward-status-tab" type="button" role="tab" data-reward-filter="active">Active <span class="reward-status-tab-count" data-count-for="active">0</span></button>
+              <button class="reward-status-tab" type="button" role="tab" data-reward-filter="all">All <span class="reward-status-tab-count" data-count-for="all">0</span></button>
+              <button class="reward-status-tab" type="button" role="tab" data-reward-filter="paused">Paused <span class="reward-status-tab-count" data-count-for="paused">0</span></button>
+              <button class="reward-status-tab" type="button" role="tab" data-reward-filter="archived">Archived <span class="reward-status-tab-count" data-count-for="archived">0</span></button>
             </div>
             <div class="list" id="rewardList"></div>
           </div>
@@ -7245,6 +7227,23 @@
               </div>
             </div>
           </div>
+
+          <div class="reward-modal" id="rewardLimitModal" aria-hidden="true">
+            <div class="reward-modal-backdrop" data-modal-close></div>
+            <div class="reward-modal-card" role="dialog" aria-modal="true" aria-labelledby="rewardLimitModalTitle">
+              <div class="reward-modal-head">
+                <div>
+                  <h3 id="rewardLimitModalTitle">Reward limit <em>reached.</em></h3>
+                  <p class="muted" id="rewardLimitModalSubtitle">Your current plan caps how many rewards can be active at once.</p>
+                </div>
+                <button class="reward-modal-close" type="button" data-modal-close aria-label="Close">×</button>
+              </div>
+              <div class="reward-modal-actions">
+                <button class="btn secondary" type="button" data-modal-close>Close</button>
+                <button class="btn" id="rewardLimitUpgradeButton" type="button">Upgrade plan</button>
+              </div>
+            </div>
+          </div>
         </section>
 
         <section class="section" id="section-stations">
@@ -7356,9 +7355,9 @@
           <div class="crumb"><span>Cycl Partner</span><span class="sep">/</span><b>Billing</b></div>
           <div class="panel">
             <h3>Billing <em>plans.</em></h3>
-            <p class="muted">Pick the monthly partner portal plan you want to use. Paid plans open Stripe Checkout so
-              you can add the card for the subscription, and existing customers can update their card in Stripe Billing
-              Portal.</p>
+            <p class="muted">Pick the monthly partner portal plan you want to use. Paid plans open a secure checkout so
+              you can add the card for the subscription, and existing customers can update their card from the billing
+              portal.</p>
             <div class="billing-strip">
               <div class="billing-card"><span class="muted">Current plan</span><strong
                   id="currentPlanName">Free</strong>
@@ -7366,7 +7365,7 @@
               </div>
               <div class="billing-card"><span class="muted">Monthly plan</span><strong id="currentPlanPrice">0
                   kr</strong>
-                <p class="muted">Billed monthly in DKK through Stripe.</p>
+                <p class="muted">Billed monthly in DKK.</p>
               </div>
               <div class="billing-card"><span class="muted">Station tier</span><strong
                   id="currentStationTier">Standard</strong>
@@ -7398,7 +7397,7 @@
             <div class="billing-account">
               <div class="billing-account-head">
                 <div>
-                  <h4>Stripe <em>account.</em></h4>
+                  <h4>Billing <em>account.</em></h4>
                   <p class="muted" id="billingStatusText">Checking subscription and saved cards…</p>
                 </div>
                 <button class="btn secondary" type="button" id="refreshBillingButton">Refresh</button>
@@ -7410,8 +7409,7 @@
             <div class="billing-actions">
               <button class="btn secondary" type="button" id="billingPortalButton">Add card</button>
               <button class="btn secondary" type="button" id="invoiceHistoryButton">Invoice history</button>
-              <button class="btn danger" type="button" id="cancelSubscriptionButton" style="display:none;">Cancel
-                subscription</button>
+              <button class="btn danger" type="button" id="cancelSubscriptionButton" style="display:none;">Cancel subscription</button>
             </div>
           </div>
 
@@ -7422,13 +7420,13 @@
               <div class="reward-modal-head invoice-history-head">
                 <div class="invoice-history-title">
                   <h3 id="invoiceHistoryTitle">Invoice history</h3>
-                  <span class="muted" id="invoiceHistoryCount">Stripe</span>
+                  <span class="muted" id="invoiceHistoryCount">Invoices</span>
                 </div>
                 <div class="invoice-history-tools">
                   <label class="invoice-search" aria-label="Search invoices">
                     <input id="invoiceHistorySearch" type="search" placeholder="Search invoices">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                      stroke-linejoin="round" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                       <circle cx="11" cy="11" r="8"></circle>
                       <path d="m21 21-4.3-4.3"></path>
                     </svg>
@@ -7437,7 +7435,7 @@
                 </div>
               </div>
               <div class="invoice-history-list" id="invoiceHistoryList">
-                <div class="invoice-history-empty">Loading Stripe invoices…</div>
+                <div class="invoice-history-empty">Loading invoices…</div>
               </div>
             </div>
           </div>
@@ -8119,7 +8117,7 @@
     </div>
   </main>
 
-  <script type="module" src="./js/obstrocted/partner-portal.js"></script>
+  <script type="module" src="./partner-portal.js"></script>
 
   <div class="kpi-popover" id="kpiPopover" role="tooltip">
     <p class="kpi-popover-title" id="kpiPopoverTitle"></p>
