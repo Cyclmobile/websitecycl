@@ -580,6 +580,9 @@ function App() {
           </h4>
           <div className="partners-logos reveal d1">
             <div className="plogo">Kolding Bibliotekerne</div>
+                   <div className="plogo">Miss Green</div>
+                   <div className="plogo">La Juice</div>
+                   <div className="plogo">Alberts burger and pita bar</div>
             <div className="plogo">+ 10 businesses</div>
           </div>
         </div>
